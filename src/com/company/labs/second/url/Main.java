@@ -8,10 +8,10 @@ public class Main {
     public static void main(String... args) {
         Scanner scanner = new Scanner(System.in);
         String addressString;
-        String regexAddressString = new String("^((http:\\/\\/|https:\\/\\/){0,1}|(www\\.){0,1}|"
-                + "([a-zA-Z0-9]{1,}\\.){1,5}([a-zA-Z]{2,}){1}|(:[1-9]{1}[0-9]{0,}){0,1}|(\\/[a-zA-Z0-9]{1,}){1,}|"
-                + "\\?(([a-zA-Z0-9]{1,}\\&{0,1}[a-zA-Z0-9]{1,})|([a-zA-Z0-9]{1}))((\\=[a-zA-Z0-9]{1,}\\&{0,1}[a-zA-Z0-9]{1,})|"
-                + "(\\=[a-zA-Z0-9]{1})){0,})$");
+        String regexAddressString = new String("^((http:\\/\\/|https:\\/\\/){0,1}(www\\.){0,1}"
+                + "([a-zA-Z0-9]{1,}\\.){1,5}([a-zA-Z]{2,}){1}(:[1-9]{1}[0-9]{0,}){0,1}(\\/[a-zA-Z0-9]{1,}){0,}"
+                + "(\\?(([a-zA-Z0-9]{1,}\\&{0,1}[a-zA-Z0-9]{1,})|([a-zA-Z0-9]{1}))((\\=[a-zA-Z0-9]{1,}\\&{0,1}"
+                + "[a-zA-Z0-9]{1,})|(\\=[a-zA-Z0-9]{1})){0,}){0,})$");
         System.out.println("Введите URL: ");
         addressString = scanner.nextLine();
         scanner.close();
