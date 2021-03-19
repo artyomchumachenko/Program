@@ -8,16 +8,12 @@ public class ipv6Main {
     public static void main(String... args) {
         Scanner scanner = new Scanner(System.in);
         String addressString = new String();
-        String regexAddressString = new String("^([0-9a-f]{1,4}\\:){7}([0-9a-f]{1,4}){1}$");
+        String regexAddressString = new String("^([0-9a-fA-F]{0,4}:){2,7}([0-9a-fA-F]{0,4})$");
         System.out.println("Введите IPv6 адрес: ");
         addressString = scanner.nextLine();
         scanner.close();
         Pattern patternAddress = Pattern.compile(regexAddressString);
         Matcher matcherAddress = patternAddress.matcher(addressString);
-        if (matcherAddress.find()) {
-            System.out.println("true");
-        } else {
-            System.out.println("false");
-        }
+        System.out.println(matcherAddress.find());
     }
 }
