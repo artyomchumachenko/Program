@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class ipv6Main {
+public class IPv6Main {
     public static void main(String... args) {
         Scanner scanner = new Scanner(System.in);
         String addressString = new String();
