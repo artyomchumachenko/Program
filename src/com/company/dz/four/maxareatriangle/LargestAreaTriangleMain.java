@@ -1,4 +1,4 @@
-package com.company.dz.four;
+package com.company.dz.four.maxareatriangle;
 
 import java.util.Scanner;
 import java.lang.Math;
