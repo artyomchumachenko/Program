@@ -1,4 +1,4 @@
-package com.company.dz.mindistpoint;
+package com.company.dz.four.mindistpoint;
 
 import java.util.Scanner;
 

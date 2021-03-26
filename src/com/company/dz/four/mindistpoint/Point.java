@@ -1,4 +1,4 @@
-package com.company.dz.mindistpoint;
+package com.company.dz.four.mindistpoint;
 
 public class Point {
 
