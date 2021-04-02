@@ -9,18 +9,14 @@ public class SimpleAverageMain {
         Scanner scanner = new Scanner(System.in);
         int numberOfNumbers = 0;
         double tempNumber = 0;
-        double number = 0;
-        double order = 0;
         double sumOrder = 0;
-        double defaultOrder = 1;
+        final double DEFAULT_ORDER = 1;
         double simpleAverage = 0;
         double sumOfNumbers = 0;
         boolean flag = true;
-        String numberValue;
-        String orderValue;
-        String regexFirst = "^(x\\:\\s\\-?[0-9]*[.,]?[0-9]+\\;\\sp\\:\\s\\-?[0-9]*[.,]?[0-9]+)$";
-        String regexSecond = "^(p\\:\\s\\-?[0-9]*[.,]?[0-9]+\\;\\sx\\:\\s\\-?[0-9]*[.,]?[0-9]+)$";
-        String regexThree = "^(x\\:\\s\\-?[0-9]*[.,]?[0-9]+)$";
+        String regexFirst = "^(x:\\s-?[0-9]*[.,]?[0-9]+;\\sp:\\s-?[0-9]*[.,]?[0-9]+)$";
+        String regexSecond = "^(p:\\s-?[0-9]*[.,]?[0-9]+;\\sx:\\s-?[0-9]*[.,]?[0-9]+)$";
+        String regexThree = "^(x:\\s-?[0-9]*[.,]?[0-9]+)$";
         String inputString;
 
         System.out.println("Введите количество значений");
@@ -45,43 +41,37 @@ public class SimpleAverageMain {
             do {
                 inputString = scanner.nextLine();
                 if (inputString.matches(regexFirst)) {
-                    String[] parts = inputString.split("\\;");
-                    numberValue = parts[0];
-                    orderValue = parts[1];
+                    String[] parts = inputString.split(";");
+                    String numberValue = parts[0];
+                    String orderValue = parts[1];
                     numberValue = numberValue.replace("x: ", "");
-                    number = Double.parseDouble(numberValue);
+                    double number = Double.parseDouble(numberValue);
                     orderValue = orderValue.replace(" p: ", "");
-                    order = Double.parseDouble(orderValue);
+                    double order = Double.parseDouble(orderValue);
                     tempNumber = number * order;
                     sumOfNumbers += tempNumber;
                     sumOrder += order;
                     flag = false;
-                    break;
-                }
-                if (inputString.matches(regexSecond)) {
-                    String[] parts = inputString.split("\\;");
-                    numberValue = parts[1];
-                    orderValue = parts[0];
+                } else if (inputString.matches(regexSecond)) {
+                    String[] parts = inputString.split(";");
+                    String numberValue = parts[1];
+                    String orderValue = parts[0];
                     numberValue = numberValue.replace(" x: ", "");
-                    number = Double.parseDouble(numberValue);
+                    double number = Double.parseDouble(numberValue);
                     orderValue = orderValue.replace("p: ", "");
-                    order = Double.parseDouble(orderValue);
+                    double order = Double.parseDouble(orderValue);
                     tempNumber = number * order;
                     sumOfNumbers += tempNumber;
                     sumOrder += order;
                     flag = false;
-                    break;
-                }
-                if (inputString.matches(regexThree)) {
-                    numberValue = inputString;
+                } else if (inputString.matches(regexThree)) {
+                    String numberValue = inputString;
                     numberValue = numberValue.replace("x: ", "");
-                    number = Double.parseDouble(numberValue);
-                    order = defaultOrder;
-                    tempNumber = number * order;
+                    double number = Double.parseDouble(numberValue);
+                    tempNumber = number * DEFAULT_ORDER;
                     sumOfNumbers += tempNumber;
-                    sumOrder += order;
+                    sumOrder += DEFAULT_ORDER;
                     flag = false;
-                    break;
                 } else {
                     System.out.println("Повторите попытку");
                     flag = true;
