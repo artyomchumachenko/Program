@@ -14,6 +14,7 @@ public class InflationMain {
         boolean flag = true;
         double currPrice = 0;
         double currInflation = 0;
+        final double ONE_HUNDRED = 100;
 
         System.out.println("Введите изначальную цену товара на начало месяца с учетом изначального"
                 + " процента инфляции");
@@ -81,12 +82,9 @@ public class InflationMain {
         currPrice = initPrice;
         for (int currStep = 0; currStep < numberOfMonths; currStep++) {
             currInflation = difference[currStep] + currInflation;
-            if (currInflation == 0) {
-                currPrice = currPrice;
-            } else {
-                currPrice = currPrice * ((100 + currInflation) / 100);
+            if (currInflation != 0) {
+                currPrice = currPrice * ((ONE_HUNDRED + currInflation) / ONE_HUNDRED);
             }
-
             if (currPrice <= 0) {
                 System.out.println("Обвал экономики, цена товара <= 0");
                 break;
