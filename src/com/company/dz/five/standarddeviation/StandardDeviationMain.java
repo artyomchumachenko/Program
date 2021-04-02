@@ -10,7 +10,6 @@ public class StandardDeviationMain {
         int numberOfNumbers = 0;
         double[] number;
         double amount = 0;
-        double[] squaresOfDifferences;
         double sumSquares = 0;
         double standardDeviation = 0;
         boolean flag = true;
@@ -49,12 +48,11 @@ public class StandardDeviationMain {
             } while (flag);
         }
         simpleAverage = amount / numberOfNumbers;
-        squaresOfDifferences = new double[numberOfNumbers];
         for (int currStep = 0; currStep < numberOfNumbers; currStep++) {
-            squaresOfDifferences[currStep] = Math.pow((number[currStep] - simpleAverage), 2);
-            sumSquares += squaresOfDifferences[currStep];
+            double squaresOfDifferences = Math.pow((number[currStep] - simpleAverage), 2);
+            sumSquares += squaresOfDifferences;
         }
-        standardDeviation = Math.sqrt((sumSquares) / (numberOfNumbers));
+        standardDeviation = Math.sqrt(sumSquares / numberOfNumbers);
         System.out.println(String.format("%.3f", standardDeviation));
     }
 }
