@@ -8,7 +8,6 @@ public class SimpleAverageMain {
 
         Scanner scanner = new Scanner(System.in);
         int numberOfNumbers = 0;
-        double tempNumber = 0;
         double sumOrder = 0;
         final double DEFAULT_ORDER = 1;
         double simpleAverage = 0;
@@ -17,7 +16,6 @@ public class SimpleAverageMain {
         String regexFirst = "^(x:\\s-?[0-9]*[.,]?[0-9]+;\\sp:\\s-?[0-9]*[.,]?[0-9]+)$";
         String regexSecond = "^(p:\\s-?[0-9]*[.,]?[0-9]+;\\sx:\\s-?[0-9]*[.,]?[0-9]+)$";
         String regexThree = "^(x:\\s-?[0-9]*[.,]?[0-9]+)$";
-        String inputString;
 
         System.out.println("Введите количество значений");
         do {
@@ -39,7 +37,7 @@ public class SimpleAverageMain {
         for (int currStep = 0; currStep < numberOfNumbers; currStep++) {
             System.out.println("Введите " + (currStep + 1) + " значение");
             do {
-                inputString = scanner.nextLine();
+                String inputString = scanner.nextLine();
                 if (inputString.matches(regexFirst)) {
                     String[] parts = inputString.split(";");
                     String numberValue = parts[0];
@@ -48,7 +46,7 @@ public class SimpleAverageMain {
                     double number = Double.parseDouble(numberValue);
                     orderValue = orderValue.replace(" p: ", "");
                     double order = Double.parseDouble(orderValue);
-                    tempNumber = number * order;
+                    double tempNumber = number * order;
                     sumOfNumbers += tempNumber;
                     sumOrder += order;
                     flag = false;
@@ -60,7 +58,7 @@ public class SimpleAverageMain {
                     double number = Double.parseDouble(numberValue);
                     orderValue = orderValue.replace("p: ", "");
                     double order = Double.parseDouble(orderValue);
-                    tempNumber = number * order;
+                    double tempNumber = number * order;
                     sumOfNumbers += tempNumber;
                     sumOrder += order;
                     flag = false;
@@ -68,7 +66,7 @@ public class SimpleAverageMain {
                     String numberValue = inputString;
                     numberValue = numberValue.replace("x: ", "");
                     double number = Double.parseDouble(numberValue);
-                    tempNumber = number * DEFAULT_ORDER;
+                    double tempNumber = number * DEFAULT_ORDER;
                     sumOfNumbers += tempNumber;
                     sumOrder += DEFAULT_ORDER;
                     flag = false;
