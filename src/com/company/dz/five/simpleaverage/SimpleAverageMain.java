@@ -9,7 +9,7 @@ public class SimpleAverageMain {
         Scanner scanner = new Scanner(System.in);
         int numberOfNumbers = 0;
         double sumOrder = 0;
-        final double DEFAULT_ORDER = 1;
+        final double defaultOrder = 1;
         double simpleAverage = 0;
         double sumOfNumbers = 0;
         boolean flag = true;
@@ -66,9 +66,9 @@ public class SimpleAverageMain {
                     String numberValue = inputString;
                     numberValue = numberValue.replace("x: ", "");
                     double number = Double.parseDouble(numberValue);
-                    double tempNumber = number * DEFAULT_ORDER;
+                    double tempNumber = number * defaultOrder;
                     sumOfNumbers += tempNumber;
-                    sumOrder += DEFAULT_ORDER;
+                    sumOrder += defaultOrder;
                     flag = false;
                 } else {
                     System.out.println("Повторите попытку");
