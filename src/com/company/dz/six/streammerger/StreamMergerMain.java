@@ -11,47 +11,85 @@ public class StreamMergerMain {
         ArrayList<Integer> threeStream = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         ArrayList<Integer> resultStream = new ArrayList<>();
-        String call = new String("STREAM 1");
+        String regexStream = new String("STREAM\\s[1-3]");
+        String regexNumber = new String("^[+,-]?[0-9]+$");
         boolean flag = true;
+        int currStream = 1;
         do {
-            switch (call) {
-                case "STREAM 1":
-                    String inputNumber = scanner.nextLine();
-                    if (inputNumber.matches("^STREAM 2$") || inputNumber.matches("^STREAM 3$")) {
-                        call = inputNumber;
-                    } else {
-                        firstStream.add(Integer.parseInt(inputNumber));
+            String inputLine = scanner.nextLine();
+            if (inputLine.matches(regexStream) || inputLine.matches("END")) {
+                switch (inputLine) {
+                    case "STREAM 1": {
+                        currStream = 1;
+                        break;
                     }
-                    break;
-                case "STREAM 2":
-                    inputNumber = scanner.nextLine();
-                    if (inputNumber.matches("^STREAM 1$") || inputNumber.matches("^STREAM 3$")) {
-                        call = inputNumber;
-                    } else {
-                        secondStream.add(Integer.parseInt(inputNumber));
+                    case "STREAM 2": {
+                        currStream = 2;
+                        break;
                     }
-                    break;
-                case "STREAM 3":
-                    inputNumber = scanner.nextLine();
-                    if (inputNumber.matches("^STREAM 1$") || inputNumber.matches("^STREAM 2$")) {
-                        call = inputNumber;
-                    } else {
-                        threeStream.add(Integer.parseInt(inputNumber));
+                    case "STREAM 3": {
+                        currStream = 3;
+                        break;
                     }
-                    break;
-                case "END":
-                    flag = false;
-                    break;
+                    case "END": {
+                        currStream = 0;
+                        flag = false;
+                        break;
+                    }
+                    default: {
+                        System.out.println("Поток не существует");
+                        break;
+                    }
+                }
+            } else if (inputLine.matches(regexNumber)) {
+                switch (currStream) {
+                    case 1: {
+                        firstStream.add(Integer.valueOf(inputLine));
+                        break;
+                    }
+                    case 2: {
+                        secondStream.add(Integer.valueOf(inputLine));
+                        break;
+                    }
+                    case 3: {
+                        threeStream.add(Integer.valueOf(inputLine));
+                        break;
+                    }
+                    case 0: {
+                        flag = false;
+                        break;
+                    }
+                    default: {
+                        System.out.println("Неизвестный поток");
+                        break;
+                    }
+                }
+            } else {
+                System.out.println("Неизвестный формат ввода");
             }
         } while (flag);
-        for (Integer first : firstStream) {
-            System.out.println(first);
-        }
-        for (Integer second : secondStream) {
-            System.out.println(second);
-        }
-        for (Integer three : threeStream) {
-            System.out.println(three);
+        scanner.close();
+        int maxNumbersOfCollections =
+                Math.max(firstStream.size(), Math.max(secondStream.size(), threeStream.size()));
+        if (maxNumbersOfCollections != 0) {
+            for (int currStep = 0; currStep < maxNumbersOfCollections; currStep++) {
+                int numIndex = 0;
+                if (currStep < firstStream.size()) {
+                    numIndex += firstStream.get(currStep);
+                }
+                if (currStep < secondStream.size()) {
+                    numIndex += secondStream.get(currStep);
+                }
+                if (currStep < threeStream.size()) {
+                    numIndex += threeStream.get(currStep);
+                }
+                resultStream.add(numIndex);
+            }
+            for (Integer number : resultStream) {
+                System.out.print(number + " ");
+            }
+        } else {
+            System.out.println("Коллекции не заполнены");
         }
     }
 }
