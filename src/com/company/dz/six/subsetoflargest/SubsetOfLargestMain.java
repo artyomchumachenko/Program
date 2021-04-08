@@ -33,11 +33,13 @@ public class SubsetOfLargestMain {
                 System.out.println("Повторите попытку");
             }
         } while (flag);
-        simpleAverage = simpleAverage / numberOfNumbers;
-        for (Double number : numbers) {
-            if (number > simpleAverage) {
-                System.out.println(number);
+        if (numberOfNumbers != 0) {
+            simpleAverage = simpleAverage / numberOfNumbers;
+            for (Double number : numbers) {
+                if (number > simpleAverage) {
+                    System.out.println(number);
+                }
             }
-        }
+        } else System.out.println("Тут пусто");
     }
 }
