@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class StringRecoveryMain {
 
     public static void main(String[] args) {
-        final String tryAgainException = "Повторите попытку";
         Scanner scanner = new Scanner(System.in);
         boolean flag = true;
         final int numberOfStrings = 2;
