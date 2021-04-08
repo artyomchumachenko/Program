@@ -25,8 +25,8 @@ public class StringRecoveryMain {
         StringBuilder retrievalString = new StringBuilder();
         String[] secondSplitString = string[1].split("-");
         for (String set : secondSplitString) {
-            retrievalString.append(retrievalStringBuffer.getOrDefault
-                    (Integer.valueOf(set), "_"));
+            retrievalString
+                    .append(retrievalStringBuffer.getOrDefault(Integer.valueOf(set), "_"));
         }
         System.out.println(retrievalString.toString());
     }
