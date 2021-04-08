@@ -6,6 +6,10 @@ import java.util.Scanner;
 public class StreamMergerMain {
 
     public static void main(String[] args) {
+        final int firstMode = 1;
+        final int secondMode = 2;
+        final int threeMode = 3;
+        final int zeroMode = 0;
         ArrayList<Integer> firstStream = new ArrayList<>();
         ArrayList<Integer> secondStream = new ArrayList<>();
         ArrayList<Integer> threeStream = new ArrayList<>();
@@ -13,11 +17,7 @@ public class StreamMergerMain {
         String regexStream = new String("STREAM\\s[1-3]");
         String regexNumber = new String("^[+-]?[0-9]+$");
         boolean flag = true;
-        int currStream = 1;
-        final int firstMode = 1;
-        final int secondMode = 2;
-        final int threeMode = 3;
-        final int zeroMode = 0;
+        int currStream = firstMode;
         do {
             String inputLine = scanner.nextLine();
             if (inputLine.matches(regexStream) || inputLine.matches("END")) {
@@ -74,8 +74,8 @@ public class StreamMergerMain {
         scanner.close();
         int maxNumbersOfCollections =
                 Math.max(firstStream.size(), Math.max(secondStream.size(), threeStream.size()));
-        ArrayList<Integer> resultStream = new ArrayList<>();
         if (maxNumbersOfCollections != 0) {
+            ArrayList<Integer> resultStream = new ArrayList<>();
             for (int currStep = 0; currStep < maxNumbersOfCollections; currStep++) {
                 int numIndex = 0;
                 if (currStep < firstStream.size()) {
