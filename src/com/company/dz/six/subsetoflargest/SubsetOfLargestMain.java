@@ -40,6 +40,8 @@ public class SubsetOfLargestMain {
                     System.out.println(number);
                 }
             }
-        } else System.out.println("Тут пусто");
+        } else {
+            System.out.println("Тут пусто");
+        }
     }
 }
