@@ -10,29 +10,32 @@ public class StreamMergerMain {
         ArrayList<Integer> secondStream = new ArrayList<>();
         ArrayList<Integer> threeStream = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Integer> resultStream = new ArrayList<>();
         String regexStream = new String("STREAM\\s[1-3]");
-        String regexNumber = new String("^[+,-]?[0-9]+$");
+        String regexNumber = new String("^[+-]?[0-9]+$");
         boolean flag = true;
         int currStream = 1;
+        final int firstMode = 1;
+        final int secondMode = 2;
+        final int threeMode = 3;
+        final int zeroMode = 0;
         do {
             String inputLine = scanner.nextLine();
             if (inputLine.matches(regexStream) || inputLine.matches("END")) {
                 switch (inputLine) {
                     case "STREAM 1": {
-                        currStream = 1;
+                        currStream = firstMode;
                         break;
                     }
                     case "STREAM 2": {
-                        currStream = 2;
+                        currStream = secondMode;
                         break;
                     }
                     case "STREAM 3": {
-                        currStream = 3;
+                        currStream = threeMode;
                         break;
                     }
                     case "END": {
-                        currStream = 0;
+                        currStream = zeroMode;
                         flag = false;
                         break;
                     }
@@ -43,19 +46,19 @@ public class StreamMergerMain {
                 }
             } else if (inputLine.matches(regexNumber)) {
                 switch (currStream) {
-                    case 1: {
+                    case firstMode: {
                         firstStream.add(Integer.valueOf(inputLine));
                         break;
                     }
-                    case 2: {
+                    case secondMode: {
                         secondStream.add(Integer.valueOf(inputLine));
                         break;
                     }
-                    case 3: {
+                    case threeMode: {
                         threeStream.add(Integer.valueOf(inputLine));
                         break;
                     }
-                    case 0: {
+                    case zeroMode: {
                         flag = false;
                         break;
                     }
@@ -71,6 +74,7 @@ public class StreamMergerMain {
         scanner.close();
         int maxNumbersOfCollections =
                 Math.max(firstStream.size(), Math.max(secondStream.size(), threeStream.size()));
+        ArrayList<Integer> resultStream = new ArrayList<>();
         if (maxNumbersOfCollections != 0) {
             for (int currStep = 0; currStep < maxNumbersOfCollections; currStep++) {
                 int numIndex = 0;
