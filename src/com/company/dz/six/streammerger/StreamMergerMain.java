@@ -22,50 +22,40 @@ public class StreamMergerMain {
             String inputLine = scanner.nextLine();
             if (inputLine.matches(regexStream) || inputLine.matches("END")) {
                 switch (inputLine) {
-                    case "STREAM 1": {
+                    case "STREAM 1":
                         currStream = firstMode;
                         break;
-                    }
-                    case "STREAM 2": {
+                    case "STREAM 2":
                         currStream = secondMode;
                         break;
-                    }
-                    case "STREAM 3": {
+                    case "STREAM 3":
                         currStream = threeMode;
                         break;
-                    }
-                    case "END": {
+                    case "END":
                         currStream = zeroMode;
                         flag = false;
                         break;
-                    }
-                    default: {
+                    default:
                         System.out.println("Поток не существует");
                         break;
-                    }
                 }
             } else if (inputLine.matches(regexNumber)) {
                 switch (currStream) {
-                    case firstMode: {
+                    case firstMode:
                         firstStream.add(Integer.valueOf(inputLine));
                         break;
-                    }
-                    case secondMode: {
+                    case secondMode:
                         secondStream.add(Integer.valueOf(inputLine));
                         break;
-                    }
-                    case threeMode: {
+                    case threeMode:
                         threeStream.add(Integer.valueOf(inputLine));
                         break;
-                    }
-                    case zeroMode: {
+                    case zeroMode:
                         flag = false;
                         break;
-                    }
-                    default: {
+                    default:
                         System.out.println("Неизвестный поток");
                         break;
-                    }
                 }
             } else {
                 System.out.println("Неизвестный формат ввода");
