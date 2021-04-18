@@ -1,5 +1,7 @@
 package com.company.labs.three.array;
 
+import com.company.labs.three.linked.SimpleLinked;
+
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -7,6 +9,17 @@ public class SimpleArray implements Array {
 
     public static void main(String[] args) {
         SimpleArray test = new SimpleArray();
+        test.add("Hello");
+        test.add("World");
+        test.add("and Andrey!");
+        SimpleArray artyom = new SimpleArray();
+        artyom.add("First");
+        artyom.add("Second");
+        artyom.add("Third");
+        test.addAll(1, artyom);
+        for (String obj : test) {
+            System.out.println(obj);
+        }
     }
 
     private String[] values;
