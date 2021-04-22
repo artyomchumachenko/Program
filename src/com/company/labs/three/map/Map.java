@@ -1,6 +1,6 @@
 package com.company.labs.three.map;
 
-interface Map {
+interface Map extends Iterable {
 
     /**
      * Возвращает количество сопоставлений "ключ-значение" на этой карте.
