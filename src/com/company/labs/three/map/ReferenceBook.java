@@ -59,7 +59,7 @@ public class ReferenceBook implements Map {
     public java.lang.Integer put(java.lang.String key, java.lang.Integer value) {
         Node newNode = new Node(key, value);
         int index = newNode.hash();
-
+        return null;
     }
 
     @Override
