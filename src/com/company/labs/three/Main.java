@@ -82,9 +82,9 @@ public class Main {
                 System.out.println(map.size());
                 System.out.println(OUTPUT_ALL_ITEMS_FLAG);
                 if (scanner.nextLine().equals("YES")) {
-                    for (Node node : map. ???){
+                    for (Node node : map.hashTable) {
                         if (node != null) {
-                            System.out.println(node.key + "->" + node.value);
+                            System.out.println(node.getKey() + "->" + node.getValue());
                         }
                     }
                 }

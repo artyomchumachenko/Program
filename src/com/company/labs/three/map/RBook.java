@@ -8,7 +8,7 @@ import java.util.Objects;
 public class RBook implements Map {
     private int size = 0;
     private static int capacity = 4;
-    Node[] hashTable = new Node[capacity];
+    public Node[] hashTable = new Node[capacity];
 
     public class Node {
         private List<Node> nodes;
@@ -23,23 +23,23 @@ public class RBook implements Map {
             nodes = new LinkedList<Node>();
         }
 
-        private List<Node> getNodes() {
+        public List<Node> getNodes() {
             return nodes;
         }
 
-        private int hash() {
+        public int hash() {
             return hashCode() % hashTable.length;
         }
 
-        private String getKey() {
+        public String getKey() {
             return key;
         }
 
-        private Integer getValue() {
+        public Integer getValue() {
             return value;
         }
 
-        private void setValue(Integer value) {
+        public void setValue(Integer value) {
             this.value = value;
         }
 
