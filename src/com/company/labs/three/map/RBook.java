@@ -10,6 +10,16 @@ public class RBook implements Map {
     private static int capacity = 4;
     public Node[] hashTable = new Node[capacity];
 
+    private int hash(final String key) {
+        int hash = 0;
+        if (key != null) {
+            for (char element : key.toCharArray()) {
+                hash += (int) element;
+            }
+        }
+        return hash;
+    }
+
     public class Node {
         private List<Node> nodes;
         private int hash;
@@ -99,10 +109,15 @@ public class RBook implements Map {
 
     @Override
     public Integer get(String key) {
-        for (Node node : hashTable) {
-            if (node != null && node.key == key) {
-                return node.value;
-            }
+        int hashTemp = hash(key);
+        if (hashTable[hashTemp % hashTable.length] != null) {
+            Node currNode = hashTable[hashTemp % hashTable.length];
+            do {
+                if (Objects.equals(currNode.getKey(), key)) {
+                    return currNode.getValue();
+                }
+                currNode = currNode.next;
+            } while (currNode != null);
         }
         return null;
     }
