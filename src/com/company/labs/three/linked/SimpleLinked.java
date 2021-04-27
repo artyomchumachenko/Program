@@ -102,20 +102,6 @@ public class SimpleLinked implements Linked {
         return temp[index];
     }
 
-//    Node node(int index) {
-//        if (index < (size >> 1)) {
-//            Node x = first;
-//            for (int i = 0; i < index; i++)
-//                x = x.next;
-//            return x;
-//        } else {
-//            Node x = last;
-//            for (int i = size - 1; i > index; i--)
-//                x = x.prev;
-//            return x;
-//        }
-//    }
-
     @Override
     public String set(int index, String element) {
         // Не получилось через Node сделать , а осталось 30 минут (*(*( приходится делать через глупейший костыль
