@@ -138,11 +138,11 @@ public class RBook implements Map {
             hashTable[index % capacity] = newNode;
         }
         if (size == capacity) {
-            Node[] tempBuckets = hashTable;
+            Node[] tempTable = hashTable;
             capacity *= 2;
             hashTable = new Node[capacity];
             size = 0;
-            for (Node node : tempBuckets) {
+            for (Node node : tempTable) {
                 if (node != null) {
                     do {
                         put(node.key, node.value);
