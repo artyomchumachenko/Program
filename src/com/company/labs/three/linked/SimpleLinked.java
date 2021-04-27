@@ -4,10 +4,6 @@ import java.util.*;
 
 public class SimpleLinked implements Linked {
 
-    public static void main(String[] args) {
-        SimpleLinked test = new SimpleLinked();
-    }
-
     private Node first;
     private Node last;
     private int size;
