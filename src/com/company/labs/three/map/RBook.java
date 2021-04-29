@@ -5,35 +5,29 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class RBook implements Map {
+public class RBook<K, V> implements Map<K, V> {
     private int size = 0;
     private static int capacity = 4;
-    public Node[] hashTable = new Node[capacity];
+    public Node<K, V>[] hashTable = new Node[capacity];
 
-    private int hash(final String key) {
-        int hash = 0;
-        if (key != null) {
-            for (char element : key.toCharArray()) {
-                hash += (int) element;
-            }
-        }
-        return hash;
+    private int hash(final K key) {
+        return Math.abs(Objects.hashCode(key));
     }
 
-    public class Node {
-        private List<Node> nodes;
+    public class Node<K, V> {
+        private List<Node<K, V>> nodes;
         private int hash;
-        private String key;
-        private Integer value;
-        Node next;
+        private K key;
+        private V value;
+        Node<K, V> next;
 
-        private Node(String key, Integer value) {
+        private Node(K key, V value) {
             this.key = key;
             this.value = value;
-            nodes = new LinkedList<Node>();
+            nodes = new LinkedList<Node<K, V>>();
         }
 
-        public List<Node> getNodes() {
+        public List<Node<K, V>> getNodes() {
             return nodes;
         }
 
@@ -41,26 +35,20 @@ public class RBook implements Map {
             return hashCode() % hashTable.length;
         }
 
-        public String getKey() {
+        public K getKey() {
             return key;
         }
 
-        public Integer getValue() {
+        public V getValue() {
             return value;
         }
 
-        public void setValue(Integer value) {
+        public void setValue(V value) {
             this.value = value;
         }
 
         public int hashCode() {
-            int hash = 0;
-            if (key != null) {
-                for (char element : key.toCharArray()) {
-                    hash += (int) element;
-                }
-            }
-            return hash;
+            return Math.abs(Objects.hashCode(key));
         }
 
         public boolean equals(Object obj) {
@@ -68,7 +56,7 @@ public class RBook implements Map {
                 return true;
             }
             if (obj instanceof Node) {
-                Node node = (Node) obj;
+                Node<K, V> node = (Node) obj;
                 return (Objects.equals(key, node.getKey()) &&
                         Objects.equals(value, node.getValue()) ||
                         Objects.equals(hash, node.hashCode()));
@@ -88,8 +76,8 @@ public class RBook implements Map {
     }
 
     @Override
-    public boolean containsKey(String key) {
-        for (Node node : hashTable) {
+    public boolean containsKey(K key) {
+        for (Node<K, V> node : hashTable) {
             if (node != null && node.key.equals(key)) {
                 return true;
             }
@@ -98,8 +86,8 @@ public class RBook implements Map {
     }
 
     @Override
-    public boolean containsValue(Integer value) {
-        for (Node node : hashTable) {
+    public boolean containsValue(V value) {
+        for (Node<K, V> node : hashTable) {
             if (node != null && node.value == value) {
                 return true;
             }
@@ -108,10 +96,10 @@ public class RBook implements Map {
     }
 
     @Override
-    public Integer get(String key) {
+    public V get(K key) {
         int hashTemp = hash(key);
         if (hashTable[hashTemp % hashTable.length] != null) {
-            Node currNode = hashTable[hashTemp % hashTable.length];
+            Node<K, V> currNode = hashTable[hashTemp % hashTable.length];
             do {
                 if (Objects.equals(currNode.getKey(), key)) {
                     return currNode.getValue();
@@ -123,19 +111,19 @@ public class RBook implements Map {
     }
 
     @Override
-    public Integer put(String key, Integer value) {
-        Node newNode = new Node(key, value);
+    public V put(K key, V value) {
+        Node<K, V> newNode = new Node<>(key, value);
         int index = newNode.hash();
-        if (hashTable[index % capacity] != null) {
-            Node currNode = hashTable[index % capacity];
+        if (hashTable[index] != null) {
+            Node<K, V> currNode = hashTable[index % capacity];
             do {
                 if (currNode.key.equals(key)) {
-                    int prev = currNode.value;
-                    currNode.value = value;
+                    V prev = currNode.getValue();
+                    currNode.setValue(value);
                     return prev;
                 }
                 if (currNode.next == null) {
-                    Node nextNode = new Node(null, null);
+                    Node<K, V> nextNode = new Node<>(null, null);
                     nextNode.value = value;
                     nextNode.key = key;
                     nextNode.hash = index;
@@ -153,11 +141,11 @@ public class RBook implements Map {
             hashTable[index % capacity] = newNode;
         }
         if (size == capacity) {
-            Node[] tempTable = hashTable;
+            Node<K, V>[] tempTable = hashTable;
             capacity *= 2;
             hashTable = new Node[capacity];
             size = 0;
-            for (Node node : tempTable) {
+            for (Node<K, V> node : tempTable) {
                 if (node != null) {
                     do {
                         put(node.key, node.value);
@@ -170,11 +158,11 @@ public class RBook implements Map {
     }
 
     @Override
-    public Integer remove(String key) {
-        Node prevNode = null;
-        for (Node node : hashTable) {
+    public V remove(K key) {
+        Node<K, V> prevNode = null;
+        for (Node<K, V> node : hashTable) {
             if (node != null && node.key.equals(key)) {
-                int value = node.value;
+                V value = node.value;
                 if (prevNode != null && node.next != null) {
                     prevNode.next = node.next;
                 } else if (prevNode == null) {
@@ -190,9 +178,9 @@ public class RBook implements Map {
     }
 
     @Override
-    public void putAll(Map map) {
-        RBook secMap = (RBook) map;
-        for (Node node : secMap.hashTable) {
+    public void putAll(Map<K, V> map) {
+        RBook<K, V> secMap = (RBook) map;
+        for (Node<K, V> node : secMap.hashTable) {
             if (node != null) {
                 put(node.key, node.value);
             }
@@ -206,11 +194,11 @@ public class RBook implements Map {
     }
 
     @Override
-    public Iterator iterator() {
-        return new Iterator<Integer>() {
+    public Iterator<V> iterator() {
+        return new Iterator<V>() {
             int countArray = 0;
             int valuesCounter = 0;
-            Iterator<Node> subIterator = null;
+            Iterator<Node<K, V>> subIterator = null;
 
             public boolean hasNext() {
                 if (valuesCounter == size) {
@@ -234,9 +222,9 @@ public class RBook implements Map {
                 return hashTable[countArray] != null;
             }
 
-            public Integer next() {
+            public V next() {
                 ++valuesCounter;
-                return (Integer) subIterator.next().getValue();
+                return (V) subIterator.next().getValue();
             }
         };
     }

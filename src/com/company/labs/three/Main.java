@@ -15,7 +15,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         SimpleArray arrayList = new SimpleArray();
         SimpleLinked linkedList = new SimpleLinked();
-        RBook map = new RBook();
+        RBook<String, String> map = new RBook<>();
         String input;
         String collection;
 
@@ -40,20 +40,8 @@ public class Main {
                     linkedList.add(input);
                     break;
                 case "MAP":
-                    boolean flag = true;
-                    int value = EMPTY;
-                    do {
-                        System.out.print("Введите значение: ");
-                        if (scanner.hasNextInt()) {
-                            value = scanner.nextInt();
-                            flag = false;
-                        } else {
-                            scanner.nextLine();
-                            System.out.println("Повторите попытку");
-                            flag = true;
-                        }
-                    } while (flag);
-                    scanner.nextLine();
+                    String value = null;
+                    value = scanner.nextLine();
                     map.put(input, value);
                     break;
             }
