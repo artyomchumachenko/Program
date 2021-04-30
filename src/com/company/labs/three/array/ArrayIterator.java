@@ -2,12 +2,12 @@ package com.company.labs.three.array;
 
 import java.util.Iterator;
 
-public class ArrayIterator implements Iterator<String> {
-    private String[] values;
+public class ArrayIterator<T> implements Iterator<T> {
+    private T[] values;
     private int size;
     private int index = 0;
 
-    ArrayIterator(String[] values, int size) {
+    ArrayIterator(T[] values, int size) {
         this.values = values;
         this.size = size;
     }
@@ -18,7 +18,7 @@ public class ArrayIterator implements Iterator<String> {
     }
 
     @Override
-    public String next() {
+    public T next() {
         return values[index++];
     }
 }

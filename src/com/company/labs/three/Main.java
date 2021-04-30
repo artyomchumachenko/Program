@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        SimpleArray arrayList = new SimpleArray();
+        SimpleArray<String> arrayList = new SimpleArray<>();
         SimpleLinked linkedList = new SimpleLinked();
         RBook<String, String> map = new RBook<>();
         String input;
@@ -52,7 +52,7 @@ public class Main {
                 System.out.println(arrayList.size());
                 System.out.println(OUTPUT_ALL_ITEMS_FLAG);
                 if (scanner.nextLine().equals("YES")) {
-                    for (String element : arrayList.toArray()) {
+                    for (String element : arrayList) {
                         System.out.println(element);
                     }
                 }
