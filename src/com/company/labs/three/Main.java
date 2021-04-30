@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         SimpleArray<String> arrayList = new SimpleArray<>();
-        SimpleLinked linkedList = new SimpleLinked();
+        SimpleLinked<String> linkedList = new SimpleLinked<>();
         RBook<String, String> map = new RBook<>();
         String input;
         String collection;
@@ -61,7 +61,7 @@ public class Main {
                 System.out.println(linkedList.size());
                 System.out.println(OUTPUT_ALL_ITEMS_FLAG);
                 if (scanner.nextLine().equals("YES")) {
-                    for (String element : linkedList.toArray()) {
+                    for (String element : linkedList) {
                         System.out.println(element);
                     }
                 }
@@ -119,7 +119,6 @@ public class Main {
                             flag = false;
                         }
                     } while (!flag);
-                    index = scanner.nextInt();
                     System.out.println(linkedList.get(index));
                     break;
                 case "MAP":

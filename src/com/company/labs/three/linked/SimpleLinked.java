@@ -2,7 +2,7 @@ package com.company.labs.three.linked;
 
 import java.util.*;
 
-public class SimpleLinked implements Linked {
+public class SimpleLinked<T> implements Linked<T> {
 
     private Node first;
     private Node last;
@@ -14,12 +14,12 @@ public class SimpleLinked implements Linked {
         size = 0;
     }
 
-    private class Node {
-        private String element;
-        private Node next;
-        private Node prev;
+    private class Node<T> {
+        private T element;
+        private Node<T> next;
+        private Node<T> prev;
 
-        public Node(String element, Node next) {
+        public Node(T element, Node<T> next) {
             this.element = element;
             this.next = next;
         }
@@ -36,32 +36,32 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public boolean contains(String o) {
+    public boolean contains(T o) {
         return indexOf(o) >= 0;
     }
 
     @Override
-    public String[] toArray() {
-        String[] temp = new String[size];
+    public T[] toArray() {
+        Object[] temp = new Object[size];
         int currIndex = 0;
-        for (String item : this) {
+        for (T item : this) {
             temp[currIndex] = item;
             ++currIndex;
         }
-        return temp;
+        return (T[]) temp;
     }
 
     @Override
-    public boolean add(String o) {
+    public boolean add(T o) {
         if (o == null) {
             throw new NullPointerException("Object is null");
         }
         if (!isEmpty()) {
-            Node prev = last;
-            last = new Node(o, null);
+            Node<T> prev = last;
+            last = new Node<>(o, null);
             prev.next = last;
         } else {
-            last = new Node(o, null);
+            last = new Node<>(o, null);
             first = last;
         }
         ++size;
@@ -69,18 +69,18 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public boolean addAll(Linked c) {
+    public boolean addAll(Linked<T> c) {
         int startSize = size;
-        for (String item : c) {
+        for (T item : c) {
             add(item);
         }
         return size != startSize;
     }
 
     @Override
-    public boolean addAll(int index, Linked c) {
+    public boolean addAll(int index, Linked<T> c) {
         int startSize = size;
-        String[] temp = c.toArray();
+        T[] temp = c.toArray();
         for (int i = 0; i < c.size(); i++) {
             add(index + i, temp[i]);
         }
@@ -93,15 +93,15 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public String get(int index) {
-        String[] temp = this.toArray();
+    public T get(int index) {
+        T[] temp = this.toArray();
         return temp[index];
     }
 
     @Override
-    public String set(int index, String element) {
+    public T set(int index, T element) {
         // Не получилось через Node сделать , а осталось 30 минут (*(*( приходится делать через глупейший костыль
-        String[] temp = this.toArray();
+        T[] temp = this.toArray();
         int defSize = size;
         clear();
         if (index >= 0 && index < defSize) {
@@ -119,8 +119,8 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public void add(int index, String element) {
-        String[] temp = this.toArray();
+    public void add(int index, T element) {
+        T[] temp = this.toArray();
         int copySizePlusOneElement = size + 1;
         size = 0;
         for (int i = 0; i < index; i++) {
@@ -133,9 +133,9 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public String remove(int index) {
-        String[] temp = this.toArray();
-        String bufRemoveElement = temp[index];
+    public T remove(int index) {
+        T[] temp = this.toArray();
+        T bufRemoveElement = temp[index];
         remove(bufRemoveElement);
         return bufRemoveElement;
     }
@@ -146,8 +146,8 @@ public class SimpleLinked implements Linked {
             throw new IllegalStateException("List is empty");
         }
         boolean removeFlag = false;
-        Node prev = first;
-        Node curr = first;
+        Node<T> prev = first;
+        Node<T> curr = first;
         while (curr.next != null || curr == last) {
             if (curr.element.equals(o)) {
                 if (size == 1) {
@@ -172,16 +172,16 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public int indexOf(String o) {
+    public int indexOf(T o) {
         int index = 0;
         if (o == null) {
-            for (Node x = first; x != null; x = x.next) {
+            for (Node<T> x = first; x != null; x = x.next) {
                 if (x.element == null)
                     return index;
                 index++;
             }
         } else {
-            for (Node x = first; x != null; x = x.next) {
+            for (Node<T> x = first; x != null; x = x.next) {
                 if (o.equals(x.element))
                     return index;
                 index++;
@@ -191,16 +191,16 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public int lastIndexOf(String o) {
+    public int lastIndexOf(T o) {
         int index = size;
         if (o == null) {
-            for (Node x = last; x != null; x = x.prev) {
+            for (Node<T> x = last; x != null; x = x.prev) {
                 index--;
                 if (x.element == null)
                     return index;
             }
         } else {
-            for (Node x = last; x != null; x = x.prev) {
+            for (Node<T> x = last; x != null; x = x.prev) {
                 index--;
                 if (o.equals(x.element))
                     return index;
@@ -210,9 +210,9 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public Linked subList(int fromIndex, int toIndex) {
-        Linked temp = new SimpleLinked();
-        String[] buffer = this.toArray();
+    public Linked<T> subList(int fromIndex, int toIndex) {
+        Linked<T> temp = new SimpleLinked<>();
+        T[] buffer = this.toArray();
         if (fromIndex == toIndex) {
             return null;
         } else if (fromIndex > toIndex) {
@@ -226,11 +226,11 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public boolean removeAll(Linked c) {
+    public boolean removeAll(Linked<T> c) {
         boolean flag = false;
         int defSize = size;
-        String[] temp = this.toArray();
-        for (String obj : c) {
+        T[] temp = this.toArray();
+        for (T obj : c) {
             for (int i = 0; i < defSize; i++) {
                 if (Objects.equals(temp[i], obj)) {
                     remove(obj);
@@ -242,11 +242,11 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public boolean containsAll(Linked c) {
+    public boolean containsAll(Linked<T> c) {
         int defSize = size;
         int currContains = 0;
-        String[] temp = this.toArray();
-        for (String obj : c) {
+        T[] temp = this.toArray();
+        for (T obj : c) {
             for (int i = 0; i < defSize; i++) {
                 if (Objects.equals(temp[i], obj)) {
                     ++currContains;
@@ -257,14 +257,14 @@ public class SimpleLinked implements Linked {
         return currContains == c.size();
     }
 
-    private class LinkedListIterator implements Iterator<String> {
-        private Node current = first;
+    private class LinkedListIterator<T> implements Iterator<T> {
+        private Node<T> current = first;
 
-        public String next() {
+        public T next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            String item = current.element;
+            T item = current.element;
             current = current.next;
             return item;
         }
@@ -279,7 +279,7 @@ public class SimpleLinked implements Linked {
     }
 
     @Override
-    public Iterator<String> iterator() {
-        return new LinkedListIterator();
+    public Iterator<T> iterator() {
+        return new LinkedListIterator<>();
     }
 }

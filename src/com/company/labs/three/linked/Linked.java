@@ -1,6 +1,6 @@
 package com.company.labs.three.linked;
 
-interface Linked extends Iterable<String> {
+interface Linked<T> extends Iterable<T> {
 
     /**
      * Возвращает количество элементов в этом списке.
@@ -25,7 +25,7 @@ interface Linked extends Iterable<String> {
      * @param o - элемент, наличие которого в этом списке необходимо проверить
      * @return true, если этот список содержит указанный элемент
      */
-    boolean contains(String o);
+    boolean contains(T o);
 
     /**
      * Возвращает массив, содержащий все элементы в этом списке в правильной последовательности
@@ -37,7 +37,7 @@ interface Linked extends Iterable<String> {
      *
      * @return массив, содержащий все элементы в этом списке в правильной последовательности
      */
-    String[] toArray();
+    T[] toArray();
 
     /**
      * Добавляет указанный элемент в конец этого списка.
@@ -45,7 +45,7 @@ interface Linked extends Iterable<String> {
      * @param o - элемент, который будет добавлен к этому списку
      * @return истина (как указано в Collection.add)
      */
-    boolean add(String o);
+    boolean add(T o);
 
     /**
      * Добавляет все элементы в указанной коллекции в конец этого списка в том порядке.
@@ -53,7 +53,7 @@ interface Linked extends Iterable<String> {
      * @param c коллекция, содержащая элементы, которые будут добавлены в этот список
      * @return истина, если этот список изменился в результате вызова
      */
-    boolean addAll(Linked c);
+    boolean addAll(Linked<T> c);
 
     /**
      * Вставляет все элементы указанной коллекции в этот список в указанную позицию.
@@ -65,7 +65,7 @@ interface Linked extends Iterable<String> {
      * @param c     коллекция, содержащая элементы, которые будут добавлены в этот список
      * @return истина, если этот список изменился в результате вызова
      */
-    boolean addAll(int index, Linked c);
+    boolean addAll(int index, Linked<T> c);
 
     /**
      * Удаляет все элементы из этого списка.
@@ -79,7 +79,7 @@ interface Linked extends Iterable<String> {
      * @param index - индекс возвращаемого элемента
      * @return элемент в указанной позиции в этом списке
      */
-    String get(int index);
+    T get(int index);
 
     /**
      * Заменяет элемент в указанной позиции в этом списке на указанный элемент.
@@ -88,7 +88,7 @@ interface Linked extends Iterable<String> {
      * @param element - элемент, который будет сохранен в указанной позиции
      * @return элемент ранее в указанной позиции
      */
-    String set(int index, String element);
+    T set(int index, T element);
 
     /**
      * Вставляет указанный элемент в указанную позицию в этом списке.
@@ -98,7 +98,7 @@ interface Linked extends Iterable<String> {
      * @param index   - индекс, по которому должен быть вставлен указанный элемент
      * @param element - элемент для вставки
      */
-    void add(int index, String element);
+    void add(int index, T element);
 
     /**
      * Удаляет элемент в указанной позиции в этом списке .
@@ -108,7 +108,7 @@ interface Linked extends Iterable<String> {
      * @param index - индекс удаляемого элемента
      * @return элемент ранее в указанной позиции
      */
-    String remove(int index);
+    T remove(int index);
 
     /**
      * Удаляет первое вхождение указанного элемента из этого списка, если он присутствует.
@@ -131,7 +131,7 @@ interface Linked extends Iterable<String> {
      * @param o - элемент для поиска
      * @return индекс первого вхождения указанного элемента в этом списке или -1, если этот список не содержит элемент
      */
-    int indexOf(String o);
+    int indexOf(T o);
 
     /**
      * Возвращает индекс последнего вхождения указанного элемента в этом списке или -1,
@@ -143,7 +143,7 @@ interface Linked extends Iterable<String> {
      * @return индекс последнего вхождения указанного элемента в этом списке или -1,
      * если этот список не содержит элемент
      */
-    int lastIndexOf(String o);
+    int lastIndexOf(T o);
 
     /**
      * Возвращает представление части этого списка между указанным fromIndex, включительно, и toIndex, исключая.
@@ -153,7 +153,7 @@ interface Linked extends Iterable<String> {
      * @param toIndex   высокая конечная точка (исключая) подсписка
      * @return вид указанного диапазона в этом списке
      */
-    Linked subList(int fromIndex, int toIndex);
+    Linked<T> subList(int fromIndex, int toIndex);
 
     /**
      * Удаляет из этого списка все его элементы, содержащиеся в указанной коллекции.
@@ -161,7 +161,7 @@ interface Linked extends Iterable<String> {
      * @param c - коллекция, содержащая элементы, которые нужно удалить из этого списка
      * @return истина, если этот список изменился в результате вызова
      */
-    boolean removeAll(Linked c);
+    boolean removeAll(Linked<T> c);
 
     /**
      * Возвращает true, если этот список содержит все элементы указанной коллекции.
@@ -169,5 +169,5 @@ interface Linked extends Iterable<String> {
      * @param c - коллекция, подлежащая проверке на наличие в этом списке
      * @return истина, если этот список содержит все элементы указанной коллекции
      */
-    boolean containsAll(Linked c);
+    boolean containsAll(Linked<T> c);
 }
