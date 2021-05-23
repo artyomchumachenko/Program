@@ -106,8 +106,9 @@ public class SimpleArray<T> implements Array<T> {
     }
 
     @Override
-    public void remove(int index) {
+    public T remove(int index) {
         Object[] temp = values;
+        Object val = temp[index];
         values = new Object[temp.length];
         System.arraycopy(temp, 0, values, 0, index);
         --size;
@@ -116,6 +117,7 @@ public class SimpleArray<T> implements Array<T> {
                 temp, index + 1, // src
                 values, index, // target
                 amountValuesAfterIndex); // amount
+        return (T) val;
     }
 
     @Override

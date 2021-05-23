@@ -1,6 +1,6 @@
-package com.company.labs.three.array;
+package com.company.labs.three.arraystr;
 
-interface Array<T> extends Iterable<T> {
+interface Array {
 
     /**
      * Возвращает количество элементов в этом списке.
@@ -25,7 +25,7 @@ interface Array<T> extends Iterable<T> {
      * @param o - элемент, наличие которого в этом списке необходимо проверить
      * @return true, если этот список содержит указанный элемент
      */
-    boolean contains(T o);
+    boolean contains(String o);
 
     /**
      * Возвращает массив, содержащий все элементы в этом списке в правильной последовательности
@@ -37,7 +37,7 @@ interface Array<T> extends Iterable<T> {
      *
      * @return массив, содержащий все элементы в этом списке в правильной последовательности
      */
-    T[] toArray();
+    String[] toArray();
 
     /**
      * Добавляет указанный элемент в конец этого списка.
@@ -45,7 +45,7 @@ interface Array<T> extends Iterable<T> {
      * @param o - элемент, который будет добавлен к этому списку
      * @return истина (как указано в Collection.add)
      */
-    boolean add(T o);
+    boolean add(String o);
 
     /**
      * Добавляет все элементы в указанной коллекции в конец этого списка в том порядке.
@@ -53,7 +53,7 @@ interface Array<T> extends Iterable<T> {
      * @param c коллекция, содержащая элементы, которые будут добавлены в этот список
      * @return истина, если этот список изменился в результате вызова
      */
-    boolean addAll(Array<T> c);
+    boolean addAll(Array c);
 
     /**
      * Вставляет все элементы указанной коллекции в этот список в указанную позицию.
@@ -65,7 +65,7 @@ interface Array<T> extends Iterable<T> {
      * @param c     коллекция, содержащая элементы, которые будут добавлены в этот список
      * @return истина, если этот список изменился в результате вызова
      */
-    boolean addAll(int index, Array<T> c);
+    boolean addAll(int index, Array c);
 
     /**
      * Удаляет все элементы из этого списка.
@@ -79,7 +79,7 @@ interface Array<T> extends Iterable<T> {
      * @param index - индекс возвращаемого элемента
      * @return элемент в указанной позиции в этом списке
      */
-    T get(int index);
+    String get(int index);
 
     /**
      * Заменяет элемент в указанной позиции в этом списке на указанный элемент.
@@ -88,7 +88,7 @@ interface Array<T> extends Iterable<T> {
      * @param element - элемент, который будет сохранен в указанной позиции
      * @return элемент ранее в указанной позиции
      */
-    T set(int index, T element);
+    String set(int index, String element);
 
     /**
      * Вставляет указанный элемент в указанную позицию в этом списке.
@@ -98,7 +98,7 @@ interface Array<T> extends Iterable<T> {
      * @param index   - индекс, по которому должен быть вставлен указанный элемент
      * @param element - элемент для вставки
      */
-    void add(int index, T element);
+    void add(int index, String element);
 
     /**
      * Удаляет элемент в указанной позиции в этом списке .
@@ -106,8 +106,9 @@ interface Array<T> extends Iterable<T> {
      * Возвращает элемент, который был удален из списка.
      *
      * @param index - индекс удаляемого элемента
+     * @return элемент ранее в указанной позиции
      */
-    T remove(int index);
+    String remove(int index);
 
     /**
      * Удаляет первое вхождение указанного элемента из этого списка, если он присутствует.
@@ -130,7 +131,7 @@ interface Array<T> extends Iterable<T> {
      * @param o - элемент для поиска
      * @return индекс первого вхождения указанного элемента в этом списке или -1, если этот список не содержит элемент
      */
-    int indexOf(T o);
+    int indexOf(String o);
 
     /**
      * Возвращает индекс последнего вхождения указанного элемента в этом списке или -1,
@@ -142,7 +143,7 @@ interface Array<T> extends Iterable<T> {
      * @return индекс последнего вхождения указанного элемента в этом списке или -1,
      * если этот список не содержит элемент
      */
-    int lastIndexOf(T o);
+    int lastIndexOf(String o);
 
     /**
      * Возвращает представление части этого списка между указанным fromIndex, включительно, и toIndex, исключая.
@@ -152,7 +153,7 @@ interface Array<T> extends Iterable<T> {
      * @param toIndex   высокая конечная точка (исключая) подсписка
      * @return вид указанного диапазона в этом списке
      */
-    Array<T> subList(int fromIndex, int toIndex);
+    Array subList(int fromIndex, int toIndex);
 
     /**
      * Удаляет из этого списка все его элементы, содержащиеся в указанной коллекции.
@@ -160,7 +161,7 @@ interface Array<T> extends Iterable<T> {
      * @param c - коллекция, содержащая элементы, которые нужно удалить из этого списка
      * @return истина, если этот список изменился в результате вызова
      */
-    boolean removeAll(Array<T> c);
+    boolean removeAll(Array c);
 
     /**
      * Возвращает true, если этот список содержит все элементы указанной коллекции.
@@ -168,5 +169,5 @@ interface Array<T> extends Iterable<T> {
      * @param c - коллекция, подлежащая проверке на наличие в этом списке
      * @return истина, если этот список содержит все элементы указанной коллекции
      */
-    boolean containsAll(Array<T> c);
+    boolean containsAll(Array c);
 }

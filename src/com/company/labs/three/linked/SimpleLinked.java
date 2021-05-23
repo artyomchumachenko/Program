@@ -42,13 +42,11 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public T[] toArray() {
-        Object[] temp = new Object[size];
-        int currIndex = 0;
-        for (T item : this) {
-            temp[currIndex] = item;
-            ++currIndex;
+        Object[] outBuffer = new Object[size];
+        for (int i = 0; i < size; i++) {
+            outBuffer[i] = get(i);
         }
-        return (T[]) temp;
+        return (T[]) outBuffer;
     }
 
     @Override
@@ -94,50 +92,64 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public T get(int index) {
-        T[] temp = this.toArray();
-        return temp[index];
+        Node<T> currNode = first;
+        for (int i = 0; i < index; i++) {
+            currNode = currNode.next;
+        }
+        return currNode.element;
     }
 
     @Override
     public T set(int index, T element) {
-        // Не получилось через Node сделать , а осталось 30 минут (*(*( приходится делать через глупейший костыль
-        T[] temp = this.toArray();
-        int defSize = size;
-        clear();
-        if (index >= 0 && index < defSize) {
-            for (int i = 0; i < index; i++) {
-                add(temp[i]);
-            }
-            add(element);
-            for (int i = index + 1; i < defSize; i++) {
-                add(temp[i]);
-            }
-        } else {
-            throw new IndexOutOfBoundsException("Index not found");
+        Node<T> currNode = first;
+        for (int i = 0; i < index; i++) {
+            currNode = currNode.next;
         }
-        return temp[index];
+        T buffer = currNode.element;
+        currNode.element = element;
+        return buffer;
     }
 
     @Override
     public void add(int index, T element) {
-        T[] temp = this.toArray();
-        int copySizePlusOneElement = size + 1;
-        size = 0;
-        for (int i = 0; i < index; i++) {
-            add(temp[i]);
-        }
-        add(element);
-        for (int i = index + 1; i < copySizePlusOneElement; i++) {
-            add(temp[i - 1]);
+        if (index == 0) {
+            Node<T> currNode = new Node<>(element, first);
+            first = currNode;
+            ++size;
+        } else {
+            Node<T> prevNode = first;
+            for (int i = 0; i < index - 1; i++) {
+                prevNode = prevNode.next;
+            }
+            Node<T> currNode = new Node<>(element, prevNode.next);
+            prevNode.next = currNode;
+            if (index == size) {
+                last = currNode;
+            }
+            ++size;
         }
     }
 
     @Override
     public T remove(int index) {
-        T[] temp = this.toArray();
-        T bufRemoveElement = temp[index];
-        remove(bufRemoveElement);
-        return bufRemoveElement;
+        if (index == 0) {
+            T buffer = (T) first.element;
+            first = first.next;
+            --size;
+            return buffer;
+        } else {
+            Node<T> prevNode = first;
+            for (int i = 0; i < index - 1; i++) {
+                prevNode = prevNode.next;
+            }
+            T buffer = prevNode.next.element;
+            prevNode.next = prevNode.next.next;
+            if (index == size) {
+                last = prevNode;
+            }
+            --size;
+            return buffer;
+        }
     }
 
     @Override
@@ -211,18 +223,16 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public Linked<T> subList(int fromIndex, int toIndex) {
-        Linked<T> temp = new SimpleLinked<>();
-        T[] buffer = this.toArray();
-        if (fromIndex == toIndex) {
-            return null;
-        } else if (fromIndex > toIndex) {
-            throw new IndexOutOfBoundsException("fromIndex > toIndex");
-        } else {
-            for (int i = fromIndex; i < toIndex; i++) {
-                temp.add(buffer[i]);
-            }
+        Linked<T> buffer = new SimpleLinked<>();
+        Node<T> currNode = first;
+        for (int i = 0; i < fromIndex - 1; i++) {
+            currNode = currNode.next;
         }
-        return temp;
+        for (int i = fromIndex; i < toIndex; i++) {
+            buffer.add(currNode.element);
+            currNode = currNode.next;
+        }
+        return buffer;
     }
 
     @Override
@@ -243,18 +253,12 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public boolean containsAll(Linked<T> c) {
-        int defSize = size;
-        int currContains = 0;
-        T[] temp = this.toArray();
-        for (T obj : c) {
-            for (int i = 0; i < defSize; i++) {
-                if (Objects.equals(temp[i], obj)) {
-                    ++currContains;
-                    break;
-                }
+        for (int i = 0; i < c.size(); i++) {
+            if (!contains(c.get(i))) {
+                return false;
             }
         }
-        return currContains == c.size();
+        return true;
     }
 
     private class LinkedListIterator<T> implements Iterator<T> {
