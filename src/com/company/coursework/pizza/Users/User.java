@@ -11,9 +11,9 @@ public class User {
         this.password = password;
     }
 
-    public boolean enter(User user) {
-        return (this.password.equals(user.password) && this.login.equals(user.login));
-    }
+//    public boolean enter(User user) {
+//        return (this.password.equals(user.password) && this.login.equals(user.login));
+//    }
 
     public boolean enter(String login, String password) {
         return (this.login.equals(login) && this.password.equals(password));

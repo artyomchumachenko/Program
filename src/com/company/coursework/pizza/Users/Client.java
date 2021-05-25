@@ -1,20 +1,20 @@
 package com.company.coursework.pizza.Users;
 
-import com.company.coursework.pizza.District.District;
+import com.company.coursework.pizza.City;
 
 public class Client extends User {
-    private District district;
+    private int district;
 
-    public Client(String nickname, String login, String password) {
+    public Client(String nickname, String login, String password, int district) {
         super(nickname, login, password);
-//        this.district = district;
-    }
-
-    public District getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(District district) {
         this.district = district;
+    }
+
+    public String getDistrict() {
+        return City.nameDistricts.get(district);
+    }
+
+    public int getDist() {
+        return district;
     }
 }
