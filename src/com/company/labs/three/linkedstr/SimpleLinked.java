@@ -148,7 +148,7 @@ public class SimpleLinked implements Linked {
             }
             String buffer = prevNode.next.element;
             prevNode.next = prevNode.next.next;
-            if (index == size) {
+            if (index == size - 1) {
                 last = prevNode;
             }
             --size;
@@ -192,13 +192,13 @@ public class SimpleLinked implements Linked {
     @Override
     public Linked subList(int fromIndex, int toIndex) {
         checkIndex(fromIndex);
-        checkIndex(toIndex);
+        checkIndexForAddNewElement(toIndex);
         if (fromIndex > toIndex) {
             throw new IndexOutOfBoundsException();
         }
         Linked buffer = new SimpleLinked();
         Node currNode = first;
-        for (int i = 0; i < fromIndex - 1; i++) {
+        for (int i = 0; i < fromIndex; i++) {
             currNode = currNode.next;
         }
         for (int i = fromIndex; i < toIndex; i++) {
