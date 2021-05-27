@@ -50,9 +50,6 @@ public class SimpleLinked implements Linked {
 
     @Override
     public boolean add(String o) {
-        if (o == null) {
-            throw new NullPointerException("Object is null");
-        }
         if (!isEmpty()) {
             Node prev = last;
             last = new Node(o, null);

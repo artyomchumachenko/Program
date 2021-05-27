@@ -4,27 +4,40 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class City {
-    private static int maxValue = Integer.MAX_VALUE;
-    private static final int SIZE = 4;
+    private static final int SIZE = 8;
     static Scanner scanner = new Scanner(System.in);
     static int[][] connectionMatrix = {
-            {0, 0, 10, 0},
-            {0, 0, 5, 0},
-            {10, 5, 0, 50},
-            {0, 0, 50, 0},
+            {0, 2, 0, 1, 3, 4, 5, 0},
+            {2, 0, 3, 0, 0, 0, 0, 10},
+            {0, 3, 0, 7, 0, 0, 0, 0},
+            {1, 0, 7, 0, 4, 0, 0, 0},
+            {3, 0, 0, 4, 0, 5, 0, 0},
+            {4, 0, 0, 0, 5, 0, 2, 0},
+            {5, 0, 0, 0, 0, 2, 0, 0},
+            {0, 10, 0, 0, 0, 0, 0, 0}
     };
 
     public static final ArrayList<String> nameDistricts = new ArrayList<>();
     static int courierDistrict = 0;
 
     public City() {
-        nameDistricts.add("Pizza House");
-        nameDistricts.add("Polyanka");
-        nameDistricts.add("Molodezh");
-        nameDistricts.add("Teatr");
+        nameDistricts.add("Пиццерия");
+        nameDistricts.add("Полянка");
+        nameDistricts.add("Сокол");
+        nameDistricts.add("Театральная");
+        nameDistricts.add("ВДНХ");
+        nameDistricts.add("Китай-город");
+        nameDistricts.add("Динамо");
+        nameDistricts.add("Аэропорт");
+//        nameDistricts.add("Молодёжная");
+//        nameDistricts.add("Парк культуры");
+//        nameDistricts.add("Проспект мира");
+//        nameDistricts.add("Проспект вернадского");
+//        nameDistricts.add("Красногвардейская");
+//        nameDistricts.add("Фрунзенская");
     }
 
-    public String makeRoad(int dest) {
+    public void makeRoad(int dest) {
         int[] minDistance = new int[SIZE];       // минимальное расстояние
         int[] visitVertexs = new int[SIZE];       // посещенные вершины
         int temp;
@@ -32,6 +45,7 @@ public class City {
         int min;
         int begin_index = courierDistrict;
         //Инициализация вершин и расстояний
+        int maxValue = Integer.MAX_VALUE;
         for (int i = 0; i < SIZE; i++) {
             minDistance[i] = maxValue;
             visitVertexs[i] = 1;
@@ -62,12 +76,6 @@ public class City {
                 visitVertexs[minIndex] = 0;
             }
         } while (minIndex < maxValue);
-        // Вывод кратчайших расстояний до вершин
-//        System.out.println("\nКратчайшие расстояния до вершин: ");
-//        for (int i = 0; i < SIZE; i++) {
-//            System.out.println(minDistance[i] + " ");
-//        }
-
         // Восстановление пути
         int[] vertexIsVisited = new int[SIZE];       // массив посещенных вершин
         int end = dest;         // индекс конечной вершины = 5 - 1
@@ -91,16 +99,15 @@ public class City {
                     }
                 }
         }
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append(minDistance[dest]).append(" минут").append(" ");
         // Вывод пути (начальная вершина оказалась в конце массива из k элементов)
         System.out.println("\nВывод кратчайшего пути");
         result.append(nameDistricts.get(vertexIsVisited[k - 1]));
         for (int i = k - 2; i >= 0; --i) {
-            result.append("->").append(nameDistricts.get(vertexIsVisited[i]));
+            result.append(" -> ").append(nameDistricts.get(vertexIsVisited[i]));
         }
         System.out.println(result.toString());
         courierDistrict = dest;
-        return null;
     }
 }

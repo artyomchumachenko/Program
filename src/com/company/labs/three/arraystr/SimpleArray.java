@@ -144,7 +144,7 @@ public class SimpleArray implements Array {
     @Override
     public Array subList(int fromIndex, int toIndex) {
         checkIndex(fromIndex);
-        checkIndex(toIndex);
+        checkIndexForAddNewElement(toIndex);
         Array temp = new SimpleArray();
         if (fromIndex == toIndex) {
             throw new IndexOutOfBoundsException("fromIndex = toIndex error");
