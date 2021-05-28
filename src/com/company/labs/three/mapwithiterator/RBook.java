@@ -1,5 +1,6 @@
-package com.company.labs.three.mapstr;
+package com.company.labs.three.mapwithiterator;
 
+import java.util.Iterator;
 import java.util.Objects;
 
 public class RBook implements Map {
@@ -26,6 +27,20 @@ public class RBook implements Map {
             this.currCapacity = currCapacity;
             this.maxUsePercent = maxUsePercent;
         }
+    }
+
+    private int hash(Node node) {
+        return node.hashCode() % hashTable.length;
+    }
+
+    private int hash(final String key) {
+        int hash = 0;
+        if (key != null) {
+            for (char element : key.toCharArray()) {
+                hash += (int) element;
+            }
+        }
+        return hash;
     }
 
     public class Node {
@@ -109,20 +124,6 @@ public class RBook implements Map {
             } while (currNode != null);
         }
         return false;
-    }
-
-    public String[] getAllKeys() {
-        String[] tmp = new String[size];
-        int index = 0;
-        for (Node currNode : hashTable) {
-            if (currNode != null) {
-                do {
-                    tmp[index++] = currNode.getKey();
-                    currNode = currNode.next;
-                } while (currNode != null);
-            }
-        }
-        return tmp;
     }
 
     @Override
@@ -269,4 +270,39 @@ public class RBook implements Map {
         }
         return hash;
     }
+
+//    public Iterator<String> iterator() {
+//        return new Iterator<>() {
+//            int countArray = 0;
+//            int valuesCounter = 0;
+//            Iterator<Node> subIterator = null;
+//
+//            public boolean hasNext() {
+//                if (valuesCounter == size) {
+//                    return false;
+//                }
+//                if (subIterator == null || !subIterator.hasNext()) {
+//                    if (moveToNextCell()) {
+//                        subIterator = hashTable[countArray].getNodes().iterator();
+//                    } else {
+//                        return false;
+//                    }
+//                }
+//                return subIterator.hasNext();
+//            }
+//
+//            private boolean moveToNextCell() {
+//                ++countArray;
+//                while (hashTable[countArray] == null) {
+//                    ++countArray;
+//                }
+//                return hashTable[countArray] != null;
+//            }
+//
+//            public V next() {
+//                ++valuesCounter;
+//                return (V) subIterator.next().getValue();
+//            }
+//        };
+//    }
 }
