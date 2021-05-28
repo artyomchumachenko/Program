@@ -35,11 +35,19 @@ public class Main {
 //        System.out.println(Arrays.asList(linkedList.toArray()));
 //        System.out.println(Arrays.asList(linkedList.subList(1, 4).toArray()));
 
+//        SimpleLinked linkedList = new SimpleLinked();
+//        linkedList.add("a1");
+//        linkedList.add("b2");
+//        System.out.println(Arrays.asList(linkedList.toArray()));
+//        linkedList.remove(1);
+//        linkedList.add("c3");
+//        System.out.println(Arrays.asList(linkedList.toArray()));
+
         SimpleLinked linkedList = new SimpleLinked();
         linkedList.add("a1");
-        linkedList.add("b2");
         System.out.println(Arrays.asList(linkedList.toArray()));
-        linkedList.remove(1);
+        linkedList.remove(0);
+        linkedList.add(0, "b2");
         linkedList.add("c3");
         System.out.println(Arrays.asList(linkedList.toArray()));
     }

@@ -1,8 +1,5 @@
 package com.company.labs.three.mapstr;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 public class RBook implements Map {
@@ -12,8 +9,6 @@ public class RBook implements Map {
     private static final double DEFAULT_MAX_USAGE_PERCENT = 0.7;
     private int currCapacity;
     private double maxUsePercent;
-
-    HashSet<Node> nodes = new HashSet<>();
 
     public RBook() {
         this(DEFAULT_CAPACITY, DEFAULT_MAX_USAGE_PERCENT);
@@ -48,7 +43,6 @@ public class RBook implements Map {
     }
 
     public class Node {
-        private List<Node> nodes;
         private int hash;
         private String key;
         private Integer value;
@@ -58,11 +52,6 @@ public class RBook implements Map {
             this.hash = hash;
             this.key = key;
             this.value = value;
-            nodes = new LinkedList<Node>();
-        }
-
-        private List<Node> getNodes() {
-            return nodes;
         }
 
         private int hash() {
@@ -170,7 +159,6 @@ public class RBook implements Map {
     public Integer put(String key, Integer value) {
         int hash = calcHash(key);
         Node newNode = new Node(hash, key, value);
-        nodes.add(newNode);
         if (hashTable[hash % hashTable.length] == null) {
             hashTable[hash % hashTable.length] = newNode;
             ++size;
@@ -179,7 +167,6 @@ public class RBook implements Map {
             do {
                 if (Objects.equals(currNode.getKey(), key)) {
                     Integer prevValue = currNode.setValue(value);
-                    nodes.remove(newNode);
                     return prevValue;
                 }
                 if (currNode.next == null) {
@@ -206,12 +193,13 @@ public class RBook implements Map {
                 Node currNode = oldBasket;
                 do {
                     if (newBaskets[currNode.getHash() % newBaskets.length] == null) {
-                        newBaskets[currNode.getHash() % newBaskets.length] = currNode;
+                        newBaskets[currNode.getHash() % newBaskets.length] = new Node(currNode.hash, currNode.key, currNode.value);
                     } else {
                         Node nodeToComplete = newBaskets[currNode.getHash() % newBaskets.length];
                         do {
                             if (nodeToComplete.next == null) {
-                                nodeToComplete.next = currNode;
+                                nodeToComplete.next = new Node(currNode.hash, currNode.key, currNode.value);
+                                break;
                             }
                             nodeToComplete = nodeToComplete.next;
                         } while (nodeToComplete != null);
@@ -232,7 +220,6 @@ public class RBook implements Map {
             do {
                 if (Objects.equals(currNode.getKey(), key)) {
                     Integer removedValue = currNode.value;
-                    nodes.remove(currNode);
                     if (prevNode == null) {
                         hashTable[hash % hashTable.length] = currNode.next;
                     } else {

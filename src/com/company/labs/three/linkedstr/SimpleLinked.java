@@ -118,6 +118,9 @@ public class SimpleLinked implements Linked {
         if (index == 0) {
             Node currNode = new Node(element, first);
             first = currNode;
+            if (size == 0) {
+                last = currNode;
+            }
             ++size;
         } else {
             Node prevNode = first;
@@ -140,6 +143,9 @@ public class SimpleLinked implements Linked {
             String buffer = first.element;
             first = first.next;
             --size;
+            if (size == 0) {
+                last = null;
+            }
             return buffer;
         } else {
             Node prevNode = first;
@@ -148,7 +154,7 @@ public class SimpleLinked implements Linked {
             }
             String buffer = prevNode.next.element;
             prevNode.next = prevNode.next.next;
-            if (index == size - 1) {
+            if (index == (size - 1)) {
                 last = prevNode;
             }
             --size;
