@@ -1,6 +1,6 @@
 package com.company.labs.three.array;
 
-interface Array<T> extends Iterable<T> {
+interface Array<T> {
 
     /**
      * Возвращает количество элементов в этом списке.
@@ -37,7 +37,9 @@ interface Array<T> extends Iterable<T> {
      *
      * @return массив, содержащий все элементы в этом списке в правильной последовательности
      */
-    T[] toArray();
+    Object[] toArray();
+
+    T[] toArray(T[] a);
 
     /**
      * Добавляет указанный элемент в конец этого списка.
@@ -106,6 +108,7 @@ interface Array<T> extends Iterable<T> {
      * Возвращает элемент, который был удален из списка.
      *
      * @param index - индекс удаляемого элемента
+     * @return элемент ранее в указанной позиции
      */
     T remove(int index);
 

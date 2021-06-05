@@ -1,67 +1,61 @@
 package com.company.labs.three.map;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 public class RBook<K, V> implements Map<K, V> {
+    private Node<K, V>[] hashTable;
     private int size = 0;
-    private static int capacity = 4;
-    public Node<K, V>[] hashTable = new Node[capacity];
+    private static final int DEFAULT_CAPACITY = 16;
+    private static final double DEFAULT_MAX_USAGE_PERCENT = 0.7;
+    private int currCapacity;
+    private double maxUsePercent;
 
-    private int hash(final K key) {
-        return Math.abs(Objects.hashCode(key));
+    public RBook() {
+        this(DEFAULT_CAPACITY, DEFAULT_MAX_USAGE_PERCENT);
+    }
+
+    public RBook(int startCapacity) {
+        this(startCapacity, DEFAULT_MAX_USAGE_PERCENT);
+    }
+
+    public RBook(int currCapacity, double maxUsePercent) {
+        if (currCapacity < 1 || maxUsePercent < 0 || maxUsePercent > 1) {
+            throw new IllegalArgumentException();
+        } else {
+            hashTable = new Node[currCapacity];
+            this.currCapacity = currCapacity;
+            this.maxUsePercent = maxUsePercent;
+        }
     }
 
     public class Node<K, V> {
-        private List<Node<K, V>> nodes;
         private int hash;
         private K key;
         private V value;
         Node<K, V> next;
 
-        private Node(K key, V value) {
+        private Node(int hash, K key, V value) {
+            this.hash = hash;
             this.key = key;
             this.value = value;
-            nodes = new LinkedList<Node<K, V>>();
         }
 
-        public List<Node<K, V>> getNodes() {
-            return nodes;
-        }
-
-        public int hash() {
-            return hashCode() % hashTable.length;
-        }
-
-        public K getKey() {
+        private K getKey() {
             return key;
         }
 
-        public V getValue() {
+        private V getValue() {
             return value;
         }
 
-        public void setValue(V value) {
-            this.value = value;
+        private V setValue(V newValue) {
+            V prevVal = this.value;
+            this.value = newValue;
+            return prevVal;
         }
 
-        public int hashCode() {
-            return Math.abs(Objects.hashCode(key));
-        }
-
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj instanceof Node) {
-                Node<K, V> node = (Node) obj;
-                return (Objects.equals(key, node.getKey()) &&
-                        Objects.equals(value, node.getValue()) ||
-                        Objects.equals(hash, node.hashCode()));
-            }
-            return false;
+        public int getHash() {
+            return hash;
         }
     }
 
@@ -77,19 +71,43 @@ public class RBook<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(K key) {
-        for (Node<K, V> node : hashTable) {
-            if (node != null && node.key.equals(key)) {
-                return true;
-            }
+        int hash = calcHash(key);
+        if (hashTable[hash % hashTable.length] != null) {
+            Node<K, V> currNode = hashTable[hash % hashTable.length];
+            do {
+                if (Objects.equals(currNode.getKey(), key)) {
+                    return true;
+                }
+                currNode = currNode.next;
+            } while (currNode != null);
         }
         return false;
     }
 
+    public Object[] getAllKeys() {
+        Object[] tmp = new Object[size];
+        int index = 0;
+        for (Node<K, V> currNode : hashTable) {
+            if (currNode != null) {
+                do {
+                    tmp[index++] = currNode.getKey();
+                    currNode = currNode.next;
+                } while (currNode != null);
+            }
+        }
+        return tmp;
+    }
+
     @Override
     public boolean containsValue(V value) {
-        for (Node<K, V> node : hashTable) {
-            if (node != null && node.value == value) {
-                return true;
+        for (Node<K, V> currNode : hashTable) {
+            if (currNode != null) {
+                do {
+                    if (Objects.equals(currNode.getValue(), value)) {
+                        return true;
+                    }
+                    currNode = currNode.next;
+                } while (currNode != null);
             }
         }
         return false;
@@ -97,9 +115,9 @@ public class RBook<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
-        int hashTemp = hash(key);
-        if (hashTable[hashTemp % hashTable.length] != null) {
-            Node<K, V> currNode = hashTable[hashTemp % hashTable.length];
+        int hash = calcHash(key);
+        if (hashTable[hash % hashTable.length] != null) {
+            Node<K, V> currNode = hashTable[hash % hashTable.length];
             do {
                 if (Objects.equals(currNode.getKey(), key)) {
                     return currNode.getValue();
@@ -112,120 +130,108 @@ public class RBook<K, V> implements Map<K, V> {
 
     @Override
     public V put(K key, V value) {
-        Node<K, V> newNode = new Node<>(key, value);
-        int index = newNode.hash();
-        if (hashTable[index] != null) {
-            Node<K, V> currNode = hashTable[index % capacity];
+        int hash = calcHash(key);
+        Node<K, V> newNode = new Node<>(hash, key, value);
+        if (hashTable[hash % hashTable.length] == null) {
+            hashTable[hash % hashTable.length] = newNode;
+            ++size;
+        } else {
+            Node<K, V> currNode = hashTable[hash % hashTable.length];
             do {
-                if (currNode.key.equals(key)) {
-                    V prev = currNode.getValue();
-                    currNode.setValue(value);
-                    return prev;
+                if (Objects.equals(currNode.getKey(), key)) {
+                    V prevValue = currNode.setValue(value);
+                    return prevValue;
                 }
                 if (currNode.next == null) {
-                    Node<K, V> nextNode = new Node<>(null, null);
-                    nextNode.value = value;
-                    nextNode.key = key;
-                    nextNode.hash = index;
-                    currNode.next = nextNode;
+                    currNode.next = newNode;
                     ++size;
+                    break;
                 }
                 currNode = currNode.next;
-            } while (currNode.next != null);
-        } else {
-            newNode.key = key;
-            newNode.value = value;
-            newNode.hash = index;
-            newNode.next = null;
-            ++size;
-            hashTable[index % capacity] = newNode;
+            } while (currNode != null);
         }
-        if (size == capacity) {
-            Node<K, V>[] tempTable = hashTable;
-            capacity *= 2;
-            hashTable = new Node[capacity];
-            size = 0;
-            for (Node<K, V> node : tempTable) {
-                if (node != null) {
-                    do {
-                        put(node.key, node.value);
-                        node = node.next;
-                    } while (node != null);
-                }
-            }
+        if (size > currCapacity * maxUsePercent) {
+            hashTable = resize();
         }
         return null;
     }
 
+    private Node<K, V>[] resize() {
+        Node<K, V>[] oldBaskets = hashTable;
+        currCapacity *= 2;
+        Node<K, V>[] newBaskets = new Node[currCapacity];
+
+        for (Node<K, V> oldBasket : oldBaskets) {
+            if (oldBasket != null) {
+                Node<K, V> currNode = oldBasket;
+                do {
+                    if (newBaskets[currNode.getHash() % newBaskets.length] == null) {
+                        newBaskets[currNode.getHash() % newBaskets.length] = new Node<>(currNode.hash, currNode.key, currNode.value);
+                    } else {
+                        Node<K, V> nodeToComplete = newBaskets[currNode.getHash() % newBaskets.length];
+                        do {
+                            if (nodeToComplete.next == null) {
+                                nodeToComplete.next = new Node<>(currNode.hash, currNode.key, currNode.value);
+                                break;
+                            }
+                            nodeToComplete = nodeToComplete.next;
+                        } while (nodeToComplete != null);
+                    }
+                    currNode = currNode.next;
+                } while (currNode != null);
+            }
+        }
+        return newBaskets;
+    }
+
     @Override
     public V remove(K key) {
-        Node<K, V> prevNode = null;
-        for (Node<K, V> node : hashTable) {
-            if (node != null && node.key.equals(key)) {
-                V value = node.value;
-                if (prevNode != null && node.next != null) {
-                    prevNode.next = node.next;
-                } else if (prevNode == null) {
-                    hashTable[node.hash % capacity] = node.next;
+        int hash = calcHash(key);
+        if (hashTable[hash % hashTable.length] != null) {
+            Node<K, V> currNode = hashTable[hash % hashTable.length];
+            Node<K, V> prevNode = null;
+            do {
+                if (Objects.equals(currNode.getKey(), key)) {
+                    V removedValue = currNode.value;
+                    if (prevNode == null) {
+                        hashTable[hash % hashTable.length] = currNode.next;
+                    } else {
+                        prevNode.next = currNode.next;
+                    }
+                    --size;
+                    return removedValue;
                 }
-                node = null;
-                --size;
-                return value;
-            }
-            prevNode = node;
+                prevNode = currNode;
+                currNode = currNode.next;
+            } while (currNode != null);
         }
         return null;
     }
 
     @Override
     public void putAll(Map<K, V> map) {
-        RBook<K, V> secMap = (RBook) map;
-        for (Node<K, V> node : secMap.hashTable) {
-            if (node != null) {
-                put(node.key, node.value);
+        if (map instanceof RBook) {
+            RBook<K, V> map2 = (RBook<K, V>) map;
+            for (Node<K, V> node : map2.hashTable) {
+                if (node != null) {
+                    do {
+                        put(node.getKey(), node.getValue());
+                        node = node.next;
+                    } while (node != null);
+                }
             }
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 
     @Override
     public void clear() {
-        hashTable = new Node[capacity];
+        hashTable = new Node[hashTable.length];
         size = 0;
     }
 
-    @Override
-    public Iterator<V> iterator() {
-        return new Iterator<V>() {
-            int countArray = 0;
-            int valuesCounter = 0;
-            Iterator<Node<K, V>> subIterator = null;
-
-            public boolean hasNext() {
-                if (valuesCounter == size) {
-                    return false;
-                }
-                if (subIterator == null || !subIterator.hasNext()) {
-                    if (moveToNextCell()) {
-                        subIterator = hashTable[countArray].getNodes().iterator();
-                    } else {
-                        return false;
-                    }
-                }
-                return subIterator.hasNext();
-            }
-
-            private boolean moveToNextCell() {
-                ++countArray;
-                while (hashTable[countArray] == null) {
-                    ++countArray;
-                }
-                return hashTable[countArray] != null;
-            }
-
-            public V next() {
-                ++valuesCounter;
-                return (V) subIterator.next().getValue();
-            }
-        };
+    private int calcHash(K key) {
+        return Math.abs(Objects.hashCode(key));
     }
 }

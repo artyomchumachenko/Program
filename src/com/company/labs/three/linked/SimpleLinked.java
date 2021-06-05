@@ -1,11 +1,11 @@
 package com.company.labs.three.linked;
 
-import java.util.*;
+import java.util.Objects;
 
 public class SimpleLinked<T> implements Linked<T> {
 
-    private Node first;
-    private Node last;
+    private Node<T> first;
+    private Node<T> last;
     private int size;
 
     public SimpleLinked() {
@@ -17,7 +17,6 @@ public class SimpleLinked<T> implements Linked<T> {
     private class Node<T> {
         private T element;
         private Node<T> next;
-        private Node<T> prev;
 
         public Node(T element, Node<T> next) {
             this.element = element;
@@ -37,29 +36,26 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public boolean contains(T o) {
-        return indexOf(o) >= 0;
+        return indexOf(o) != -1;
     }
 
     @Override
-    public T[] toArray() {
-        Object[] outBuffer = new Object[size];
+    public Object[] toArray() {
+        Object[] temp = new Object[size];
         for (int i = 0; i < size; i++) {
-            outBuffer[i] = get(i);
+            temp[i] = get(i);
         }
-        return (T[]) outBuffer;
+        return temp;
     }
 
     @Override
     public boolean add(T o) {
-        if (o == null) {
-            throw new NullPointerException("Object is null");
-        }
         if (!isEmpty()) {
             Node<T> prev = last;
-            last = new Node<>(o, null);
+            last = new Node<T>(o, null);
             prev.next = last;
         } else {
-            last = new Node<>(o, null);
+            last = new Node<T>(o, null);
             first = last;
         }
         ++size;
@@ -68,30 +64,35 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public boolean addAll(Linked<T> c) {
-        int startSize = size;
-        for (T item : c) {
-            add(item);
+        checkNullLinkedException(c);
+        int prevSize = this.size;
+        for (int i = 0; i < c.size(); i++) {
+            add(c.get(i));
         }
-        return size != startSize;
+        return this.size == prevSize;
     }
 
     @Override
     public boolean addAll(int index, Linked<T> c) {
-        int startSize = size;
-        T[] temp = c.toArray();
+        checkNullLinkedException(c);
+        checkIndexForAddNewElement(index);
+        int prevSize = this.size;
         for (int i = 0; i < c.size(); i++) {
-            add(index + i, temp[i]);
+            add(index + i, c.get(i));
         }
-        return size != startSize;
+        return this.size == prevSize;
     }
 
     @Override
     public void clear() {
         size = 0;
+        first = null;
+        last = null;
     }
 
     @Override
     public T get(int index) {
+        checkIndex(index);
         Node<T> currNode = first;
         for (int i = 0; i < index; i++) {
             currNode = currNode.next;
@@ -101,6 +102,7 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public T set(int index, T element) {
+        checkIndex(index);
         Node<T> currNode = first;
         for (int i = 0; i < index; i++) {
             currNode = currNode.next;
@@ -112,9 +114,13 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public void add(int index, T element) {
+        checkIndexForAddNewElement(index);
         if (index == 0) {
             Node<T> currNode = new Node<>(element, first);
             first = currNode;
+            if (size == 0) {
+                last = currNode;
+            }
             ++size;
         } else {
             Node<T> prevNode = first;
@@ -132,10 +138,14 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public T remove(int index) {
+        checkIndex(index);
         if (index == 0) {
-            T buffer = (T) first.element;
+            T buffer = first.element;
             first = first.next;
             --size;
+            if (size == 0) {
+                last = null;
+            }
             return buffer;
         } else {
             Node<T> prevNode = first;
@@ -144,7 +154,7 @@ public class SimpleLinked<T> implements Linked<T> {
             }
             T buffer = prevNode.next.element;
             prevNode.next = prevNode.next.next;
-            if (index == size) {
+            if (index == (size - 1)) {
                 last = prevNode;
             }
             --size;
@@ -154,78 +164,47 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public boolean remove(Object o) {
-        if (isEmpty()) {
-            throw new IllegalStateException("List is empty");
-        }
-        boolean removeFlag = false;
-        Node<T> prev = first;
-        Node<T> curr = first;
-        while (curr.next != null || curr == last) {
-            if (curr.element.equals(o)) {
-                if (size == 1) {
-                    first = null;
-                    last = null;
-                } else if (curr.equals(first)) {
-                    first = first.next;
-                } else if (curr.equals(last)) {
-                    last = prev;
-                    last.next = null;
-                } else {
-                    prev.next = curr.next;
-                }
-                --size;
-                removeFlag = true;
-                break;
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(o, get(i))) {
+                remove(i);
+                return true;
             }
-            prev = curr;
-            curr = prev.next;
         }
-        return removeFlag;
+        return false;
     }
 
     @Override
     public int indexOf(T o) {
-        int index = 0;
-        if (o == null) {
-            for (Node<T> x = first; x != null; x = x.next) {
-                if (x.element == null)
-                    return index;
-                index++;
-            }
-        } else {
-            for (Node<T> x = first; x != null; x = x.next) {
-                if (o.equals(x.element))
-                    return index;
-                index++;
+        int index = -1;
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(get(i), o)) {
+                return i;
             }
         }
-        return -1;
+        return index;
     }
 
     @Override
     public int lastIndexOf(T o) {
-        int index = size;
-        if (o == null) {
-            for (Node<T> x = last; x != null; x = x.prev) {
-                index--;
-                if (x.element == null)
-                    return index;
-            }
-        } else {
-            for (Node<T> x = last; x != null; x = x.prev) {
-                index--;
-                if (o.equals(x.element))
-                    return index;
+        int index = -1;
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(get(i), o)) {
+                index = i;
             }
         }
-        return -1;
+        return index;
     }
 
     @Override
     public Linked<T> subList(int fromIndex, int toIndex) {
+        checkIndex(fromIndex);
+        checkIndexForAddNewElement(toIndex);
+        if (fromIndex > toIndex) {
+            throw new IndexOutOfBoundsException();
+        }
         Linked<T> buffer = new SimpleLinked<>();
         Node<T> currNode = first;
-        for (int i = 0; i < fromIndex - 1; i++) {
+        for (int i = 0; i < fromIndex; i++) {
             currNode = currNode.next;
         }
         for (int i = fromIndex; i < toIndex; i++) {
@@ -237,22 +216,17 @@ public class SimpleLinked<T> implements Linked<T> {
 
     @Override
     public boolean removeAll(Linked<T> c) {
-        boolean flag = false;
-        int defSize = size;
-        T[] temp = this.toArray();
-        for (T obj : c) {
-            for (int i = 0; i < defSize; i++) {
-                if (Objects.equals(temp[i], obj)) {
-                    remove(obj);
-                    flag = true;
-                }
-            }
+        checkNullLinkedException(c);
+        int prevSize = this.size;
+        for (int i = 0; i < c.size(); i++) {
+            remove(c.get(i));
         }
-        return flag;
+        return this.size != prevSize;
     }
 
     @Override
     public boolean containsAll(Linked<T> c) {
+        checkNullLinkedException(c);
         for (int i = 0; i < c.size(); i++) {
             if (!contains(c.get(i))) {
                 return false;
@@ -261,29 +235,27 @@ public class SimpleLinked<T> implements Linked<T> {
         return true;
     }
 
-    private class LinkedListIterator<T> implements Iterator<T> {
-        private Node<T> current = first;
-
-        public T next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            T item = current.element;
-            current = current.next;
-            return item;
+    private void checkIndex(int index) {
+        if (index >= size) {
+            throw new IndexOutOfBoundsException();
         }
-
-        public boolean hasNext() {
-            return current != null;
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
+        if (index < 0) {
+            throw new IndexOutOfBoundsException();
         }
     }
 
-    @Override
-    public Iterator<T> iterator() {
-        return new LinkedListIterator<>();
+    private void checkIndexForAddNewElement(int index) {
+        if (index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (index < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    private void checkNullLinkedException(Linked<T> c) {
+        if (c == null) {
+            throw new IllegalArgumentException();
+        }
     }
 }

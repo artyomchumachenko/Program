@@ -2,54 +2,25 @@ package com.company.labs.three.array;
 
 public class Main {
     public static void main(String[] args) {
-        SimpleArray<String> array = new SimpleArray<>();
-        array.add("Testing Mode");
-        array.add("Testing Krot");
-        array.add("Testing Spot");
-        System.out.println("Список:");
-        for (String obj : array) {
-            System.out.println(obj);
-        }
-        System.out.println();
-        System.out.println("size = " + array.size());
-        System.out.println("empty = " + array.isEmpty());
-        System.out.println("contains Testing Mode = " + array.contains("Testing Mode"));
-        System.out.println("contains Testing MDDD = " + array.contains("Testing MDDD"));
-        SimpleArray<String> testArray = new SimpleArray<>();
-        testArray.add("Test List One");
-        testArray.add("Test List Two");
-        testArray.add("Test List Three");
-        testArray.add("Test List Four");
-        testArray.addAll(array);
-        testArray.addAll(1, array);
-        System.out.println();
-        for (String obj : testArray) {
-            System.out.println(obj);
-        }
-        testArray.clear();
-        for (String obj : testArray) {
-            System.out.println(obj);
-        }
-        System.out.println();
-        System.out.println("get index 1 array = " + array.get(1));
-        array.add(1, "FirstIndex");
-        for (String obj : testArray) {
-            System.out.println(obj);
-        }
-        array.remove(1);
-        array.remove("Testing Krot");
-        for (String obj : testArray) {
-            System.out.println(obj);
-        }
-        System.out.println();
-        System.out.println("indexOf Testing Spot = " + array.indexOf("Testing Spot"));
-        System.out.println("testArray 1-3 index subList = ");
-        for (String obj : testArray.subList(1, 3)) {
-            System.out.println(obj);
-        }
-        testArray.removeAll(array);
-        for (String obj : testArray) {
-            System.out.println(obj);
-        }
+        SimpleArray<String> arraySize = new SimpleArray<>(12);
+        arraySize.add("Hello World");
+        arraySize.add("I'm Artyom");
+        arraySize.add("I'm rly crazy fish");
+        System.out.println("empty = " + arraySize.isEmpty());
+        System.out.println("size = " + arraySize.size());
+        System.out.println("contains with Hello World = " + arraySize.contains("Hello World"));
+        System.out.println("get 1 index = " + arraySize.get(1));
+        arraySize.set(0, "Bye Bye World");
+        System.out.println("set 0 Bye Bye World = " + arraySize.get(0));
+        arraySize.add(1, "I'm rly good program");
+        System.out.println("get 1 = " + arraySize.get(1));
+        arraySize.remove("I'm rly good program");
+        arraySize.remove(0);
+        arraySize.add("Versus Battle");
+        System.out.println("bbw indexOf = " + arraySize.indexOf("Bye Bye World"));
+        System.out.println("VB indexOf = " + arraySize.indexOf("Versus Battle"));
+        System.out.println("SubList 0-2 = " + arraySize.subList(0, 2));
+        arraySize.clear();
+        System.out.println("empty = " + arraySize.isEmpty());
     }
 }

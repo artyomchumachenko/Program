@@ -1,16 +1,25 @@
 package com.company.labs.three.array;
 
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class SimpleArray<T> implements Array<T> {
 
-    private Object[] values;
+    private T[] values;
     private int size = 0;
+    private static final int DEFAULT_SIZE = 10;
+    private static final int MULTIPLIER = 2;
 
     public SimpleArray() {
-        int defSize = 10;
-        values = new Object[defSize];
+        this(DEFAULT_SIZE);
+    }
+
+    public SimpleArray(int startSize) {
+        if (startSize > 0) {
+            this.values = (T[]) new Object[startSize];
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
@@ -25,106 +34,92 @@ public class SimpleArray<T> implements Array<T> {
 
     @Override
     public boolean contains(T o) {
-        for (Object obj : values) {
-            if (Objects.equals(obj, o)) {
-                return true;
-            }
-        }
-        return false;
+        return indexOf(o) != -1;
     }
 
     @Override
-    public T[] toArray() {
-        Object[] temp = new Object[size];
-        System.arraycopy(values, 0, temp, 0, size);
-        return (T[]) temp;
+    public Object[] toArray() {
+        return Arrays.copyOf(this.values, this.size);
+    }
+
+    @SuppressWarnings("unchecked")
+    public T[] toArray(T[] a) {
+        return (T[]) Arrays.copyOf(this.values, this.size, a.getClass());
     }
 
     @Override
     public boolean add(T o) {
-        if (size == values.length) {
-            Object[] temp = values;
-            int increaseSize = 2;
-            values = new String[size * increaseSize];
-            System.arraycopy(temp, 0, values, 0, size);
-        }
-        values[size] = o;
-        ++size;
+        add(size, o);
         return true;
     }
 
     @Override
     public boolean addAll(Array<T> c) {
-        int startSize = size;
-        for (T obj : c) {
-            add(obj);
+        checkCollectionNullException(c);
+        int startSize = this.size;
+        for (int i = 0; i < c.size(); i++) {
+            add(c.get(i));
         }
-        return size != startSize;
+        return this.size != startSize;
     }
 
     @Override
     public boolean addAll(int index, Array<T> c) {
-        int startSize = size;
-        T[] temp = c.toArray();
-        for (int i = 0; i < temp.length; i++) {
-            add(index + i, temp[i]);
+        checkCollectionNullException(c);
+        checkIndexForAddNewElement(index);
+        int prevSize = this.size;
+        for (int i = 0; i < c.size(); i++) {
+            add(index + i, c.get(i));
         }
-        return size != startSize;
+        return this.size != prevSize;
     }
 
     @Override
     public void clear() {
         size = 0;
+        this.values = (T[]) new Object[DEFAULT_SIZE];
     }
 
     @Override
     public T get(int index) {
-        return (T) values[index];
+        checkIndex(index);
+        return values[index];
     }
 
     @Override
     public T set(int index, T element) {
-        if (index <= size && index >= 0) {
-            values[index] = element;
-        }
-        return (T) values[index];
+        checkIndex(index);
+        T temp = this.values[index];
+        this.values[index] = element;
+        return temp;
     }
 
     @Override
     public void add(int index, T element) {
-        Object[] temp = values;
-        int copySizePlusOneElement = size + 1;
-        size = 0;
-        values = new Object[temp.length + 1];
-        for (int i = 0; i < index; i++) {
-            add((T) temp[i]);
+        checkIndexForAddNewElement(index);
+        if (size == values.length) {
+            values = Arrays.copyOf(values, values.length * MULTIPLIER);
         }
-        add(element);
-        for (int i = index + 1; i < copySizePlusOneElement; i++) {
-            add((T) temp[i - 1]);
-        }
+        System.arraycopy(values, index, values, index + 1, size - index);
+        values[index] = element;
+        ++size;
     }
 
     @Override
     public T remove(int index) {
-        Object[] temp = values;
-        Object val = temp[index];
-        values = new Object[temp.length];
-        System.arraycopy(temp, 0, values, 0, index);
+        checkIndex(index);
+        T temp = this.values[index];
         --size;
-        int amountValuesAfterIndex = size - index;
-        System.arraycopy(
-                temp, index + 1, // src
-                values, index, // target
-                amountValuesAfterIndex); // amount
-        return (T) val;
+        System.arraycopy(values, index + 1, values, index, size - index);
+        values[size] = null;
+        return temp;
     }
 
     @Override
     public boolean remove(Object o) {
-        for (int currStep = 0; currStep < size; currStep++) {
-            if (values[currStep].equals(o)) {
-                remove(currStep);
+        for (int i = 0; i < this.size; i++) {
+            if (Objects.equals(values[i], o)) {
+                remove(i);
                 return true;
             }
         }
@@ -133,11 +128,9 @@ public class SimpleArray<T> implements Array<T> {
 
     @Override
     public int indexOf(T o) {
-        if (size != 0) {
-            for (int currStep = 0; currStep < size; currStep++) {
-                if (values[currStep].equals(o)) {
-                    return currStep;
-                }
+        for (int i = 0; i < this.size; i++) {
+            if (Objects.equals(values[i], o)) {
+                return i;
             }
         }
         return -1;
@@ -145,11 +138,9 @@ public class SimpleArray<T> implements Array<T> {
 
     @Override
     public int lastIndexOf(T o) {
-        if (size != 0) {
-            for (int currStep = size - 1; currStep >= 0; currStep--) {
-                if (values[currStep].equals(o)) {
-                    return currStep;
-                }
+        for (int i = this.size - 1; i >= 0; i--) {
+            if (Objects.equals(values[i], o)) {
+                return i;
             }
         }
         return -1;
@@ -157,6 +148,8 @@ public class SimpleArray<T> implements Array<T> {
 
     @Override
     public Array<T> subList(int fromIndex, int toIndex) {
+        checkIndex(fromIndex);
+        checkIndexForAddNewElement(toIndex);
         Array<T> temp = new SimpleArray<>();
         if (fromIndex == toIndex) {
             throw new IndexOutOfBoundsException("fromIndex = toIndex error");
@@ -164,7 +157,7 @@ public class SimpleArray<T> implements Array<T> {
             throw new IndexOutOfBoundsException("fromIndex > toIndex error");
         } else {
             for (int i = fromIndex; i < toIndex; i++) {
-                temp.add((T) values[i]);
+                temp.add(values[i]);
             }
         }
         return temp;
@@ -172,34 +165,46 @@ public class SimpleArray<T> implements Array<T> {
 
     @Override
     public boolean removeAll(Array<T> c) {
-        boolean flag = false;
-        for (T obj : c) {
-            for (int i = 0; i < size; i++) {
-                if (values[i].equals(obj)) {
-                    remove(i);
-                    flag = true;
-                }
-            }
+        checkCollectionNullException(c);
+        int prevSize = this.size;
+        for (int i = 0; i < c.size(); i++) {
+            remove(c.get(i));
         }
-        return flag;
+        return this.size != prevSize;
     }
 
     @Override
     public boolean containsAll(Array<T> c) {
-        if (size == c.size()) {
-            for (int i = 0; i < size; i++) {
-                if (!(values[i].equals(c.toArray()[i]))) {
-                    return false;
-                }
+        checkCollectionNullException(c);
+        for (int i = 0; i < c.size(); i++) {
+            if (!contains(c.get(i))) {
+                return false;
             }
-        } else {
-            return false;
         }
         return true;
     }
 
-    @Override
-    public Iterator<T> iterator() {
-        return new ArrayIterator<T>((T[]) values, size);
+    private void checkIndex(int index) {
+        if (index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (index < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    private void checkIndexForAddNewElement(int index) {
+        if (index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (index < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    private void checkCollectionNullException(Array<T> c) {
+        if (c == null) {
+            throw new IllegalArgumentException();
+        }
     }
 }

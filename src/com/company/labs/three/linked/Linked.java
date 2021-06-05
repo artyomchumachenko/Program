@@ -1,6 +1,6 @@
 package com.company.labs.three.linked;
 
-interface Linked<T> extends Iterable<T> {
+interface Linked<T> {
 
     /**
      * Возвращает количество элементов в этом списке.
@@ -37,7 +37,7 @@ interface Linked<T> extends Iterable<T> {
      *
      * @return массив, содержащий все элементы в этом списке в правильной последовательности
      */
-    T[] toArray();
+    Object[] toArray();
 
     /**
      * Добавляет указанный элемент в конец этого списка.

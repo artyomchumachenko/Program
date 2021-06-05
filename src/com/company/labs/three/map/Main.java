@@ -1,8 +1,8 @@
-package com.company.labs.three.mapstr;
+package com.company.labs.three.map;
 
 public class Main {
     public static void main(String[] args) {
-        RBook myMap = new RBook();
+        RBook<String, Integer> myMap = new RBook<>();
         myMap.put("Hello World", 14);
         myMap.put("I'm Artyom", 20);
         myMap.put("I'm rly crazy fish", 30);
