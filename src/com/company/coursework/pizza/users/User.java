@@ -1,4 +1,4 @@
-package com.company.coursework.pizza.Users;
+package com.company.coursework.pizza.users;
 
 public class User {
     private String login;
@@ -10,10 +10,6 @@ public class User {
         this.login = login;
         this.password = password;
     }
-
-//    public boolean enter(User user) {
-//        return (this.password.equals(user.password) && this.login.equals(user.login));
-//    }
 
     public boolean enter(String login, String password) {
         return (this.login.equals(login) && this.password.equals(password));

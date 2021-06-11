@@ -1,4 +1,4 @@
-package com.company.coursework.pizza.Users;
+package com.company.coursework.pizza.users;
 
 import com.company.coursework.pizza.City;
 
