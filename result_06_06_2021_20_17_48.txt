@@ -1,9 +1,0 @@
-reg
-a
-a
-a
-6
-ent
-a
-a
-yes

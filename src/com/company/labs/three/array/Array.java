@@ -1,6 +1,6 @@
 package com.company.labs.three.array;
 
-interface Array<T> {
+interface Array<T> extends Iterable<T> {
 
     /**
      * Возвращает количество элементов в этом списке.

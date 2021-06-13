@@ -1,6 +1,7 @@
 package com.company.labs.three.array;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class SimpleArray<T> implements Array<T> {
@@ -206,5 +207,10 @@ public class SimpleArray<T> implements Array<T> {
         if (c == null) {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayIterator<>(values, size);
     }
 }
