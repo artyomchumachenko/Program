@@ -1,6 +1,5 @@
 package com.company.summerpractice.patternstate;
 
-
 /**
  * Общий интерфейс всех состояний.
  */

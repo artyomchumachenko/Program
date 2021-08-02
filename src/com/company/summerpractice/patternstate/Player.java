@@ -1,6 +1,5 @@
 package com.company.summerpractice.patternstate;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,11 +8,12 @@ public class Player {
     private boolean playing = false;
     private final List<String> playlist = new ArrayList<>();
     private int currentTrack = 0;
+    private static final int NUMBER_OF_TRACKS = 10;
 
     public Player() {
         this.state = new ReadyState(this);
         setPlaying(true);
-        for (int i = 1; i <= 12; i++) {
+        for (int i = 1; i <= NUMBER_OF_TRACKS; i++) {
             playlist.add("Track " + i);
         }
     }
